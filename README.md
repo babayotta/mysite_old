@@ -1,2 +1,4 @@
-# mysite
-Currently mysite includes an application TYB - Track your budget.
+#mysite
+My pet projects.
+##tyb
+TYB - Track Your Budget.
