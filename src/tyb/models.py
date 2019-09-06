@@ -1,3 +1,5 @@
+import datetime
+
 from django.db import models
 from django.conf import settings
 
@@ -13,9 +15,10 @@ class Transaction(models.Model):
     )
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
                              on_delete=models.CASCADE)
-    date = models.DateTimeField()
-    description = models.CharField(max_length=300)
-    cash = models.FloatField()
+    date = models.DateField(default=datetime.date.today())
+    description = models.CharField(max_length=300,
+                                   default='Some description.')
+    cash = models.FloatField(default=0)
     transaction_type = models.CharField(max_length=1,
                                         choices=TRANSACTION_TYPES,
                                         default=BUY)
