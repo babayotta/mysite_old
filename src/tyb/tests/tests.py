@@ -1,14 +1,14 @@
 import datetime
 
 from django.test import TestCase
+from django.contrib.auth import get_user_model
 
-from users.models import CustomUser
 from tyb.models import Transaction
 
 
 class TransactionModelTest(TestCase):
 
     def test_transaction_has_a_valid_creation_date(self):
-        user = CustomUser()
+        user = get_user_model()
         transaction = Transaction(user)
         self.assertEqual(transaction.date, datetime.date.today())
