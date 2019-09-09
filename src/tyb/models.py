@@ -13,12 +13,25 @@ class Transaction(models.Model):
         (TAX, 'Tax'),
         (BUY, 'Buy'),
     )
-    user = models.ForeignKey(settings.AUTH_USER_MODEL,
-                             on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE
+    )
     date = models.DateField(default=datetime.date.today)
-    description = models.CharField(max_length=300,
-                                   default='Some description.')
+    description = models.CharField(
+        max_length=300,
+        default='Some description.'
+    )
     cash = models.FloatField(default=0)
-    transaction_type = models.CharField(max_length=1,
-                                        choices=TRANSACTION_TYPES,
-                                        default=BUY)
+    transaction_type = models.CharField(
+        max_length=1,
+        choices=TRANSACTION_TYPES,
+        default=BUY
+    )
+
+    def __str__(self):
+        return '{} - {} - {}'.format(
+            self.get_transaction_type_display(),
+            self.cash,
+            self.description,
+        )
