@@ -1,6 +1,7 @@
 from django.urls import path
 from tyb import views
 
+app_name = 'tyb'
 urlpatterns = [
-    path('', views.index, name='index'),
+    path('', views.current_month, name='current_month'),
 ]
