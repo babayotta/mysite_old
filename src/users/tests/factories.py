@@ -9,4 +9,3 @@ class CustomUserFactory(factory.django.DjangoModelFactory):
 
     email = factory.Faker('email')
     username = factory.LazyAttribute(lambda o: o.email)
-    first_day_of_month = factory.LazyAttribute(lambda o: random.randint(1, 31))

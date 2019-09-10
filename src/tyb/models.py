@@ -1,7 +1,15 @@
 import datetime
-
 from django.db import models
 from django.conf import settings
+from users.models import CustomUser
+
+
+class TransactionManager(models.Manager):
+    def get_queryset(self, user: CustomUser):
+        return super(TransactionManager, self).get_queryset().filter(user=user)
+
+    def current_month(self, user: CustomUser):
+        pass
 
 
 class Transaction(models.Model):
@@ -28,6 +36,8 @@ class Transaction(models.Model):
         choices=TRANSACTION_TYPES,
         default=BUY
     )
+    objects = models.Manager()
+    user_transactions = TransactionManager()
 
     def __str__(self):
         return '{} - {} - {}'.format(
