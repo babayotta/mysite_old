@@ -9,9 +9,10 @@ class TransactionFactory(factory.django.DjangoModelFactory):
         model = Transaction
 
     user = factory.LazyAttribute(lambda o: CustomUserFactory())
-    date = factory.Faker('date_between', start_date='-30d', end_date='today')
+    date = factory.Faker('date_this_month', before_today=True, after_today=True)
     description = factory.Faker('sentence', nb_words=5)
-    cash = factory.LazyAttribute(lambda o: random.randrange(1000))
+    # cash = factory.LazyAttribute(lambda o: random.randrange(1000))
+    cash = factory.Faker('pyfloat',right_digits=2, positive=True, min_value=0, max_value=3000)
     transaction_type = factory.LazyAttribute(
         lambda o: random.choice([Transaction.PROFIT, Transaction.TAX, Transaction.BUY])
     )

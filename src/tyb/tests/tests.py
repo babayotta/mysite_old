@@ -14,16 +14,32 @@ class TransactionModelTest(TestCase):
 
 
 class TransactionManagerTests(TestCase):
-    def test_get_all_user_transactions(self):
+    def test_get_queryset(self):
         user = CustomUserFactory()
-        TransactionFactory.create_batch(3, user=user)
         TransactionFactory.create_batch(5)
 
         valid_queryset = []
-        for query in Transaction.objects.filter(user=user):
-            valid_queryset.append('<Transaction: %s>' % query)
+        for transaction in TransactionFactory.create_batch(3, user=user):
+            valid_queryset.append('<Transaction: %s>' % transaction)
+
         self.assertQuerysetEqual(
             Transaction.user_transactions.get_queryset(user),
+            valid_queryset,
+            ordered=False
+        )
+
+    def test_current_month(self):
+        user = CustomUserFactory()
+        today = datetime.date.today()
+        TransactionFactory.create_batch(5, user=user, date=today-datetime.timedelta(days=40))
+        TransactionFactory.create_batch(5)
+
+        valid_queryset = []
+        for transaction in TransactionFactory.create_batch(3, user=user):
+            valid_queryset.append('<Transaction: %s>' % transaction)
+
+        self.assertQuerysetEqual(
+            Transaction.user_transactions.current_month(user),
             valid_queryset,
             ordered=False
         )
