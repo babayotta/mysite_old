@@ -19,3 +19,7 @@ class TransactionFactoryCurrentMonth(factory.django.DjangoModelFactory):
 
 class TransactionFactoryCurrentYear(TransactionFactoryCurrentMonth):
     date = factory.Faker('date_this_year', before_today=True, after_today=True)
+
+
+class TransactionFactoryWithoutCurrentYear(TransactionFactoryCurrentMonth):
+    date = factory.Faker('date_between', start_date='-3y', end_date='-1y')

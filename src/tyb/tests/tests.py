@@ -28,6 +28,21 @@ class TransactionManagerTests(TestCase):
             ordered=False
         )
 
+    def test_get_transactions_for_year(self):
+        user = CustomUserFactory()
+        today = datetime.date.today()
+        TransactionFactoryWithoutCurrentYear.create_batch(5)
+
+        valid_queryset = []
+        for transaction in TransactionFactoryCurrentYear.create_batch(3, user=user):
+            valid_queryset.append('<Transaction: %s>' % transaction)
+
+        self.assertQuerysetEqual(
+            Transaction.user_transactions.get_transactions_for_year(user, today),
+            valid_queryset,
+            ordered=False
+        )
+
     def test_get_transactions_for_current_month(self):
         user = CustomUserFactory()
         today = datetime.date.today()

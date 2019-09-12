@@ -8,6 +8,9 @@ class TransactionManager(models.Manager):
     def get_queryset(self, user: CustomUser):
         return super(TransactionManager, self).get_queryset().filter(user=user)
 
+    def get_transactions_for_year(self, user: CustomUser, date: datetime.date):
+        return self.get_queryset(user).filter(date__year=date.year)
+
     def get_transactions_for_month(self, user: CustomUser, month: int):
         return self.get_queryset(user).filter(date__month=month)
 
