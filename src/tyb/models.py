@@ -8,9 +8,8 @@ class TransactionManager(models.Manager):
     def get_queryset(self, user: CustomUser):
         return super(TransactionManager, self).get_queryset().filter(user=user)
 
-    def current_month(self, user: CustomUser):
-        today = datetime.date.today()
-        return self.get_queryset(user).filter(date__month=today.month)
+    def get_month(self, user: CustomUser, month: int):
+        return self.get_queryset(user).filter(date__month=month)
 
 
 class Transaction(models.Model):

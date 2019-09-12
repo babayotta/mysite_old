@@ -7,6 +7,7 @@ from tyb.models import Transaction
 def current_month(request):
     if not request.user.is_authenticated:
         return render(request, 'mysite/home.html')
-    transactions = Transaction.user_transactions.current_month(request.user)
+    today = datetime.date.today()
+    transactions = Transaction.user_transactions.get_month(request.user, today.month)
     context = {'transactions': transactions}
     return render(request, 'tyb/current_month.html', context)

@@ -4,7 +4,7 @@ from tyb.models import Transaction
 from users.tests.factories import CustomUserFactory
 
 
-class TransactionFactory(factory.django.DjangoModelFactory):
+class TransactionFactoryCurrentMonth(factory.django.DjangoModelFactory):
     class Meta:
         model = Transaction
 
@@ -16,3 +16,7 @@ class TransactionFactory(factory.django.DjangoModelFactory):
     transaction_type = factory.LazyAttribute(
         lambda o: random.choice([Transaction.PROFIT, Transaction.TAX, Transaction.BUY])
     )
+
+
+class TransactionFactoryCurrentYear(TransactionFactoryCurrentMonth):
+    date = factory.Faker('date_this_year', before_today=True, after_today=True)
