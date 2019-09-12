@@ -1,8 +1,8 @@
 import datetime
 from django.test import TestCase
 from django.contrib.auth import get_user_model
+from tyb.tests.factories import *
 from tyb.models import Transaction
-from tyb.tests.factories import TransactionFactoryCurrentMonth
 from users.tests.factories import CustomUserFactory
 
 
@@ -16,10 +16,10 @@ class TransactionModelTest(TestCase):
 class TransactionManagerTests(TestCase):
     def test_get_queryset(self):
         user = CustomUserFactory()
-        TransactionFactoryCurrentMonth.create_batch(5)
+        TransactionFactoryCurrentYear.create_batch(5)
 
         valid_queryset = []
-        for transaction in TransactionFactoryCurrentMonth.create_batch(3, user=user):
+        for transaction in TransactionFactoryCurrentYear.create_batch(3, user=user):
             valid_queryset.append('<Transaction: %s>' % transaction)
 
         self.assertQuerysetEqual(
@@ -28,11 +28,12 @@ class TransactionManagerTests(TestCase):
             ordered=False
         )
 
-    def test_get_month_with_current_month(self):
+    def test_get_transactions_for_current_month(self):
         user = CustomUserFactory()
         today = datetime.date.today()
-        TransactionFactoryCurrentMonth.create_batch(5, user=user,
-                                                    date=today - datetime.timedelta(days=40))
+        delta = datetime.timedelta(days=50)
+        TransactionFactoryCurrentMonth.create_batch(5, user=user, date=today-delta)
+        TransactionFactoryCurrentYear.create_batch(5)
         TransactionFactoryCurrentMonth.create_batch(5)
 
         valid_queryset = []
@@ -40,7 +41,7 @@ class TransactionManagerTests(TestCase):
             valid_queryset.append('<Transaction: %s>' % transaction)
 
         self.assertQuerysetEqual(
-            Transaction.user_transactions.get_month(user, today.month),
+            Transaction.user_transactions.get_transactions_for_month(user, today.month),
             valid_queryset,
             ordered=False
         )
