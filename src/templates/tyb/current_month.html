@@ -3,15 +3,17 @@
 {% block title %}Current month{% endblock %}
 
 {% block content %}
-    <table>
-    {% for transaction in transactions %}
-        <tr>
-            <th>{{ transaction.date }}</th>
-            <th>{{ transaction.get_transaction_type_display }}</th>
-            <th>{{ transaction.cash }}</th>
-            <th>{{ transaction.description }}</th>
-            <th>{{ transaction.user }}</th>
-        </tr>
-    {% endfor %}
-    </table>
+    <div class="container">
+        <table>
+            {% for transaction in transactions %}
+                <tr>
+                    <th>{{ transaction.date }}</th>
+                    <th>{{ transaction.get_transaction_type_display }}</th>
+                    <th>{{ transaction.cash }}</th>
+                    <th>{{ transaction.description }}</th>
+                    <th>{{ transaction.user }}</th>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
 {% endblock %}
