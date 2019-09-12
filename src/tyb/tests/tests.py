@@ -45,3 +45,9 @@ class TransactionManagerTests(TestCase):
             valid_queryset,
             ordered=False
         )
+
+    def test_get_transactions_by_type_for_month(self):
+        pass
+
+    def test_get_sum_of_transactions_by_type_for_month(self):
+        pass
