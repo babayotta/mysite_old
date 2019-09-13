@@ -5,31 +5,32 @@ from users.models import CustomUser
 
 
 class TransactionManager(models.Manager):
+
     def get_queryset(self, user: CustomUser):
         return super(TransactionManager, self).get_queryset().filter(user=user)
 
     def get_transactions_for_year(self, user: CustomUser, date: datetime.date):
         return self.get_queryset(user).filter(date__year=date.year)
 
-    def get_transactions_for_month(self, user: CustomUser, month: int):
-        return self.get_queryset(user).filter(date__month=month)
+    def get_transactions_for_month(self, user: CustomUser, date: datetime.date):
+        return self.get_transactions_for_year(user, date).filter(date__month=date.month)
 
     def get_transactions_by_type_for_month(
             self,
             user: CustomUser,
-            month: int,
+            date: datetime.date,
             transaction_type: str
     ):
-        return self.get_transactions_for_month(user, month).filter(transaction_type=transaction_type)
+        return self.get_transactions_for_month(user, date).filter(transaction_type=transaction_type)
 
     def get_sum_of_transactions_by_type_for_month(
             self,
             user: CustomUser,
-            month: int,
+            date: datetime.date,
             transaction_type: str
     ):
-        return self.get_transactions_by_type_for_month(user, month, transaction_type
-                                                       ).aggregate(models.Sum('cash'))
+        return self.get_transactions_by_type_for_month(
+            user, date, transaction_type).aggregate(models.Sum('cash'))
 
 
 class Transaction(models.Model):

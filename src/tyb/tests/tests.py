@@ -43,7 +43,7 @@ class TransactionManagerTests(TestCase):
             ordered=False
         )
 
-    def test_get_transactions_for_current_month(self):
+    def test_get_transactions_for_month(self):
         user = CustomUserFactory()
         today = datetime.date.today()
         delta = datetime.timedelta(days=50)
@@ -56,13 +56,38 @@ class TransactionManagerTests(TestCase):
             valid_queryset.append('<Transaction: %s>' % transaction)
 
         self.assertQuerysetEqual(
-            Transaction.user_transactions.get_transactions_for_month(user, today.month),
+            Transaction.user_transactions.get_transactions_for_month(user, today),
             valid_queryset,
             ordered=False
         )
 
     def test_get_transactions_by_type_for_month(self):
-        pass
+        user = CustomUserFactory()
+        today = datetime.date.today()
+        TransactionFactoryCurrentMonth.create_batch(5, user=user, transaction_type=Transaction.TAX)
+        TransactionFactoryCurrentMonth.create_batch(5, user=user, transaction_type=Transaction.PROFIT)
+
+        valid_queryset = []
+        for transaction in TransactionFactoryCurrentMonth.create_batch(3, user=user,
+                                                                       transaction_type=Transaction.BUY):
+            valid_queryset.append('<Transaction: %s>' % transaction)
+
+        self.assertQuerysetEqual(
+            Transaction.user_transactions.get_transactions_by_type_for_month(user, today, Transaction.BUY),
+            valid_queryset,
+            ordered=False
+        )
 
     def test_get_sum_of_transactions_by_type_for_month(self):
-        pass
+        user = CustomUserFactory()
+        today = datetime.date.today()
+        TransactionFactoryCurrentMonth.create_batch(5, user=user, transaction_type=Transaction.TAX, cash=123)
+        TransactionFactoryCurrentMonth.create_batch(3, user=user, transaction_type=Transaction.BUY, cash=123)
+
+        valid_sum = {'cash__sum': 369}
+
+        self.assertEqual(
+            Transaction.user_transactions.get_sum_of_transactions_by_type_for_month(user, today,
+                                                                                    Transaction.BUY),
+            valid_sum
+        )
