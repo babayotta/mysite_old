@@ -2,3 +2,4 @@ django
 ipython
 psycopg2-binary
 factory_boy
+django-debug-toolbar
