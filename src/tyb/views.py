@@ -38,7 +38,7 @@ def current_month(request):
     taxes_sum = tax_transactions.aggregate(Sum('cash'))['cash__sum']
     profits_sum = profit_transactions.aggregate(Sum('cash'))['cash__sum']
 
-    budget_for_day = ( profits_sum - taxes_sum ) / number_of_days
+    budget_for_day = (profits_sum - taxes_sum) / number_of_days
 
     buys = []
     for date in [datetime.date(today.year, today.month, day) for day in range(1, number_of_days+1)]:
@@ -68,8 +68,6 @@ def current_month(request):
             profit_transactions_for_date,
             profit_transactions_for_date.aggregate(Sum('cash'))['cash__sum'],
         ))
-
-
 
     context = {
         'buys': buys,
