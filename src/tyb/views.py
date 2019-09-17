@@ -38,6 +38,18 @@ def current_month(request):
     taxes_sum = tax_transactions.aggregate(Sum('cash'))['cash__sum']
     profits_sum = profit_transactions.aggregate(Sum('cash'))['cash__sum']
 
+    previous_transactions = Transaction.objects.filter(user=user, date__lt=today.replace(day=1))
+
+    previous_buys = previous_transactions.filter(transaction_type=Transaction.BUY).aggregate(Sum('cash'))['cash__sum']
+    previous_buys = previous_buys if isinstance(previous_buys, float) else 0
+    previous_taxes = previous_transactions.filter(transaction_type=Transaction.TAX).aggregate(Sum('cash'))['cash__sum']
+    previous_taxes = previous_taxes if isinstance(previous_taxes, float) else 0
+    previous_profits = previous_transactions.filter(transaction_type=Transaction.PROFIT).aggregate(Sum('cash'))['cash__sum']
+    previous_profits = previous_profits if isinstance(previous_profits, float) else 0
+
+    previous_sum = round(previous_profits - previous_taxes - previous_buys, 2)
+    profits_sum = round(previous_sum + profits_sum, 2)
+
     budget_for_day = (profits_sum - taxes_sum) / number_of_days
 
     buys = []
@@ -47,7 +59,7 @@ def current_month(request):
         buys.append(EntryBuy(
             date,
             buy_transactions_for_date,
-            transactions_sum if type(transactions_sum) == type(0.1) else 0,
+            transactions_sum if isinstance(transactions_sum, float) else 0,
             budget_for_day,
         ))
 
@@ -68,6 +80,13 @@ def current_month(request):
             profit_transactions_for_date,
             profit_transactions_for_date.aggregate(Sum('cash'))['cash__sum'],
         ))
+
+
+    profits.append(Entry(
+        today.replace(day=1),
+        [Transaction(description='Previous months.', cash=previous_sum)],
+        previous_sum,
+    ))
 
     context = {
         'buys': buys,
