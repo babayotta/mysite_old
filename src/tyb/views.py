@@ -34,19 +34,21 @@ def current_month(request):
     taxes = []
     tax_transactions = transactions.filter(transaction_type=Transaction.TAX)
     for date in [query.date for query in tax_transactions.order_by('date').distinct('date')]:
+        tax_transactions_for_date = tax_transactions.filter(date=date)
         taxes.append(Entry(
             date,
-            tax_transactions.filter(date=date),
-            tax_transactions.filter(date=date).aggregate(Sum('cash'))['cash__sum']
+            tax_transactions_for_date,
+            tax_transactions_for_date.aggregate(Sum('cash'))['cash__sum']
         ))
 
     profits = []
     profit_transactions = transactions.filter(transaction_type=Transaction.PROFIT)
     for date in [query.date for query in profit_transactions.order_by('date').distinct('date')]:
+        profit_transactions_for_date = profit_transactions.filter(date=date)
         profits.append(Entry(
             date,
-            profit_transactions.filter(date=date),
-            profit_transactions.filter(date=date).aggregate(Sum('cash'))['cash__sum']
+            profit_transactions_for_date,
+            profit_transactions_for_date.aggregate(Sum('cash'))['cash__sum']
         ))
 
     buys_sum = buy_transactions.aggregate(Sum('cash'))['cash__sum']
