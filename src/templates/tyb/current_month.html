@@ -97,6 +97,8 @@
                     <th>Description</th>
                     <th>Cash</th>
                     <th>All cash</th>
+                    <th>Budget for day</th>
+                    <th>Balance</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -116,6 +118,8 @@
                             {% endfor %}
                         </td>
                         <td>{{ buy.transactions_sum }}</td>
+                        <td>{{ buy.budget_for_day }}</td>
+                        <td>{{ buy.balance }}</td>
                     </tr>
                 {% endfor %}
                 </tbody>
