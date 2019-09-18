@@ -13,12 +13,12 @@ class Entry:
 
 
 class EntryBuy:
-    def __init__(self, date, transactions, transactions_sum, budget_for_day):
+    def __init__(self, date, transactions, transactions_sum, budget_for_day, balance_for_day):
         self.date = date
         self.transactions = transactions
         self.transactions_sum = transactions_sum
-        self.budget_for_day = round(budget_for_day, 2)
-        self.balance = round(budget_for_day - transactions_sum, 2)
+        self.budget_for_day = budget_for_day
+        self.balance_for_day = balance_for_day
 
 
 def current_month(request):
@@ -35,8 +35,11 @@ def current_month(request):
     profit_transactions = transactions.filter(transaction_type=Transaction.PROFIT)
 
     buys_sum = buy_transactions.aggregate(Sum('cash'))['cash__sum']
+    buys_sum = buys_sum if isinstance(buys_sum, float) else 0
     taxes_sum = tax_transactions.aggregate(Sum('cash'))['cash__sum']
+    taxes_sum = taxes_sum if isinstance(taxes_sum, float) else 0
     profits_sum = profit_transactions.aggregate(Sum('cash'))['cash__sum']
+    profits_sum = profits_sum if isinstance(profits_sum, float) else 0
 
     previous_transactions = Transaction.objects.filter(user=user, date__lt=today.replace(day=1))
 
@@ -47,20 +50,42 @@ def current_month(request):
     previous_profits = previous_transactions.filter(transaction_type=Transaction.PROFIT).aggregate(Sum('cash'))['cash__sum']
     previous_profits = previous_profits if isinstance(previous_profits, float) else 0
 
-    previous_sum = round(previous_profits - previous_taxes - previous_buys, 2)
+    previous_sum = previous_profits - previous_taxes - previous_buys
+    previous_sum = previous_sum if isinstance(previous_sum, float) else 0
     profits_sum = round(previous_sum + profits_sum, 2)
 
-    budget_for_day = (profits_sum - taxes_sum) / number_of_days
+    budget_for_month = [0 for day in range(number_of_days)]
+    balance_for_month = [0 for day in range(number_of_days)]
+    remaining_days = number_of_days
+    balance_for_day = previous_sum
+    for day in range(1, number_of_days + 1):
+        date = today.replace(day=day)
+
+        profit_for_day = profit_transactions.filter(date=date).aggregate(Sum('cash'))['cash__sum']
+        profit_for_day = profit_for_day if isinstance(profit_for_day, float) else 0
+        tax_for_day = tax_transactions.filter(date=date).aggregate(Sum('cash'))['cash__sum']
+        tax_for_day = tax_for_day if isinstance(tax_for_day, float) else 0
+        buy_for_day = buy_transactions.filter(date=date).aggregate(Sum('cash'))['cash__sum']
+        buy_for_day = buy_for_day if isinstance(buy_for_day, float) else 0
+
+        budget_for_day = (profit_for_day - tax_for_day + balance_for_day) / remaining_days
+        for i in range(day-1, number_of_days):
+            budget_for_month[i] += round(budget_for_day, 0)
+        balance_for_day = budget_for_month[day-1] - buy_for_day
+        balance_for_month[day-1] += round(balance_for_day, 2)
+        remaining_days -= 1
 
     buys = []
     for date in [datetime.date(today.year, today.month, day) for day in range(1, number_of_days+1)]:
         buy_transactions_for_date = buy_transactions.filter(date=date)
         transactions_sum = buy_transactions_for_date.aggregate(Sum('cash'))['cash__sum']
+        transactions_sum = round(transactions_sum, 2) if isinstance(transactions_sum, float) else 0
         buys.append(EntryBuy(
-            date,
-            buy_transactions_for_date,
-            transactions_sum if isinstance(transactions_sum, float) else 0,
-            budget_for_day,
+            date=date,
+            transactions=buy_transactions_for_date,
+            transactions_sum=transactions_sum,
+            budget_for_day=budget_for_month[date.day-1],
+            balance_for_day=balance_for_month[date.day-1]
         ))
 
     taxes = []
@@ -81,11 +106,10 @@ def current_month(request):
             profit_transactions_for_date.aggregate(Sum('cash'))['cash__sum'],
         ))
 
-
     profits.append(Entry(
         today.replace(day=1),
-        [Transaction(description='Previous months.', cash=previous_sum)],
-        previous_sum,
+        [Transaction(description='Previous months.', cash=round(previous_sum, 2))],
+        round(previous_sum, 2),
     ))
 
     context = {
