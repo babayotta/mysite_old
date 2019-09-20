@@ -28,21 +28,26 @@ def current_month(request):
     tax_transactions = transactions.filter(transaction_type=Transaction.TAX).order_by('date')
     profit_transactions = transactions.filter(transaction_type=Transaction.PROFIT).order_by('date')
 
-    buys_sum = buy_transactions.aggregate(cash=Coalesce(Sum('cash'), V(0)))['cash']
-    taxes_sum = tax_transactions.aggregate(cash=Coalesce(Sum('cash'), V(0)))['cash']
-    profits_sum = profit_transactions.aggregate(cash=Coalesce(Sum('cash'), V(0)))['cash']
+    transactions_sums = transactions.aggregate(
+        profit_sum=Coalesce(Sum('cash', filter=Q(transaction_type=Transaction.PROFIT)), V(0)),
+        tax_sum=Coalesce(Sum('cash', filter=Q(transaction_type=Transaction.TAX)), V(0)),
+        buy_sum=Coalesce(Sum('cash', filter=Q(transaction_type=Transaction.BUY)), V(0))
+    )
 
     previous_sum = Transaction.objects.filter(user=user, date__lt=today.replace(day=1)).aggregate(
-        cash=Coalesce(Sum('cash', filter=Q(transaction_type=Transaction.PROFIT)), V(0)) -
+        cash=
+        Coalesce(Sum('cash', filter=Q(transaction_type=Transaction.PROFIT)), V(0)) -
         Coalesce(Sum('cash', filter=Q(transaction_type=Transaction.TAX)), V(0)) -
         Coalesce(Sum('cash', filter=Q(transaction_type=Transaction.BUY)), V(0))
     )['cash']
-    profits_sum = round(previous_sum + profits_sum, 2)
+
+    transactions_sums['profit_sum'] += round(previous_sum, 2)
 
     budget_for_month = [0 for day in range(number_of_days)]
     balance_for_month = [0 for day in range(number_of_days)]
     remaining_days = number_of_days
     balance_for_day = previous_sum
+
     for day in range(1, number_of_days + 1):
         date = today.replace(day=day)
 
@@ -77,9 +82,9 @@ def current_month(request):
         'buys': buys,
         'taxes': tax_transactions,
         'profits': profit_transactions,
-        'buys_sum': buys_sum,
-        'taxes_sum': taxes_sum,
-        'profits_sum': profits_sum,
+        'buys_sum': transactions_sums['buy_sum'],
+        'taxes_sum': transactions_sums['tax_sum'],
+        'profits_sum': transactions_sums['profit_sum'],
         'previous_sum': round(previous_sum, 2),
     }
     return render(request, 'tyb/current_month.html', context)
