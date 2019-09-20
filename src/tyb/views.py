@@ -1,7 +1,7 @@
 import datetime
 from calendar import monthrange
 from django.shortcuts import render
-from django.db.models import Sum, Value as V
+from django.db.models import Sum, Q, Value as V
 from django.db.models.functions import Coalesce
 from tyb.models import Transaction
 
@@ -39,16 +39,11 @@ def current_month(request):
     taxes_sum = tax_transactions.aggregate(cash=Coalesce(Sum('cash'), V(0)))['cash']
     profits_sum = profit_transactions.aggregate(cash=Coalesce(Sum('cash'), V(0)))['cash']
 
-    previous_transactions = Transaction.objects.filter(user=user, date__lt=today.replace(day=1))
-
-    previous_buys = previous_transactions.filter(transaction_type=Transaction.BUY).aggregate(
-        cash=Coalesce(Sum('cash'), V(0)))['cash']
-    previous_taxes = previous_transactions.filter(transaction_type=Transaction.TAX).aggregate(
-        cash=Coalesce(Sum('cash'), V(0)))['cash']
-    previous_profits = previous_transactions.filter(transaction_type=Transaction.PROFIT).aggregate(
-        cash=Coalesce(Sum('cash'), V(0)))['cash']
-
-    previous_sum = previous_profits - previous_taxes - previous_buys
+    previous_sum = Transaction.objects.filter(user=user, date__lt=today.replace(day=1)).aggregate(
+        cash=Sum('cash', filter=Q(transaction_type=Transaction.PROFIT)) -
+        Sum('cash', filter=Q(transaction_type=Transaction.TAX)) -
+        Sum('cash', filter=Q(transaction_type=Transaction.BUY))
+    )['cash']
     profits_sum = round(previous_sum + profits_sum, 2)
 
     budget_for_month = [0 for day in range(number_of_days)]
