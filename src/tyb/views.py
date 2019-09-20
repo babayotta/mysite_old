@@ -44,12 +44,12 @@ def current_month(request):
     transactions_sums['profit_sum'] += round(previous_sum, 2)
 
     budget_for_month = [0 for day in range(number_of_days)]
-    balance_for_month = [0 for day in range(number_of_days)]
     remaining_days = number_of_days
     balance_for_day = previous_sum
-
-    for day in range(1, number_of_days + 1):
-        date = today.replace(day=day)
+    buys = []
+    for day in range(number_of_days):
+        date = today.replace(day=day+1)
+        buy_transactions_for_date = buy_transactions.filter(date=date)
 
         profit_for_day = profit_transactions.filter(date=date).aggregate(
             cash=Coalesce(Sum('cash'), V(0)))['cash']
@@ -59,23 +59,17 @@ def current_month(request):
             cash=Coalesce(Sum('cash'), V(0)))['cash']
 
         budget_for_day = (profit_for_day - tax_for_day + balance_for_day) / remaining_days
-        for i in range(day-1, number_of_days):
+        for i in range(day, number_of_days):
             budget_for_month[i] += round(budget_for_day, 0)
-        balance_for_day = budget_for_month[day-1] - buy_for_day
-        balance_for_month[day-1] += round(balance_for_day, 2)
+        balance_for_day = budget_for_month[day] - buy_for_day
         remaining_days -= 1
 
-    buys = []
-    for date in [datetime.date(today.year, today.month, day) for day in range(1, number_of_days+1)]:
-        buy_transactions_for_date = buy_transactions.filter(date=date)
-        transactions_sum = buy_transactions_for_date.aggregate(
-            cash=Coalesce(Sum('cash'), V(0)))['cash']
         buys.append(EntryBuy(
             date=date,
             transactions=buy_transactions_for_date,
-            transactions_sum=transactions_sum,
-            budget_for_day=budget_for_month[date.day-1],
-            balance_for_day=balance_for_month[date.day-1]
+            transactions_sum=buy_for_day,
+            budget_for_day=budget_for_month[day],
+            balance_for_day=balance_for_day
         ))
 
     context = {
