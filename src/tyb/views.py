@@ -6,13 +6,6 @@ from django.db.models.functions import Coalesce
 from tyb.models import Transaction
 
 
-class Entry:
-    def __init__(self, date, transactions, transactions_sum):
-        self.date = date
-        self.transactions = transactions
-        self.transactions_sum = transactions_sum
-
-
 class EntryBuy:
     def __init__(self, date, transactions, transactions_sum, budget_for_day, balance_for_day):
         self.date = date
@@ -32,17 +25,17 @@ def current_month(request):
     transactions = Transaction.objects.filter(user=user, date__year=today.year, date__month=today.month)
 
     buy_transactions = transactions.filter(transaction_type=Transaction.BUY)
-    tax_transactions = transactions.filter(transaction_type=Transaction.TAX)
-    profit_transactions = transactions.filter(transaction_type=Transaction.PROFIT)
+    tax_transactions = transactions.filter(transaction_type=Transaction.TAX).order_by('date')
+    profit_transactions = transactions.filter(transaction_type=Transaction.PROFIT).order_by('date')
 
     buys_sum = buy_transactions.aggregate(cash=Coalesce(Sum('cash'), V(0)))['cash']
     taxes_sum = tax_transactions.aggregate(cash=Coalesce(Sum('cash'), V(0)))['cash']
     profits_sum = profit_transactions.aggregate(cash=Coalesce(Sum('cash'), V(0)))['cash']
 
     previous_sum = Transaction.objects.filter(user=user, date__lt=today.replace(day=1)).aggregate(
-        cash=Sum('cash', filter=Q(transaction_type=Transaction.PROFIT)) -
-        Sum('cash', filter=Q(transaction_type=Transaction.TAX)) -
-        Sum('cash', filter=Q(transaction_type=Transaction.BUY))
+        cash=Coalesce(Sum('cash', filter=Q(transaction_type=Transaction.PROFIT)), V(0)) -
+        Coalesce(Sum('cash', filter=Q(transaction_type=Transaction.TAX)), V(0)) -
+        Coalesce(Sum('cash', filter=Q(transaction_type=Transaction.BUY)), V(0))
     )['cash']
     profits_sum = round(previous_sum + profits_sum, 2)
 
@@ -80,36 +73,13 @@ def current_month(request):
             balance_for_day=balance_for_month[date.day-1]
         ))
 
-    taxes = []
-    for date in [query.date for query in tax_transactions.order_by('date').distinct('date')]:
-        tax_transactions_for_date = tax_transactions.filter(date=date)
-        taxes.append(Entry(
-            date,
-            tax_transactions_for_date,
-            tax_transactions_for_date.aggregate(Sum('cash'))['cash__sum'],
-        ))
-
-    profits = []
-    for date in [query.date for query in profit_transactions.order_by('date').distinct('date')]:
-        profit_transactions_for_date = profit_transactions.filter(date=date)
-        profits.append(Entry(
-            date,
-            profit_transactions_for_date,
-            profit_transactions_for_date.aggregate(Sum('cash'))['cash__sum'],
-        ))
-
-    profits.append(Entry(
-        today.replace(day=1),
-        [Transaction(description='Previous months.', cash=round(previous_sum, 2))],
-        round(previous_sum, 2),
-    ))
-
     context = {
         'buys': buys,
-        'taxes': taxes,
-        'profits': profits,
+        'taxes': tax_transactions,
+        'profits': profit_transactions,
         'buys_sum': buys_sum,
         'taxes_sum': taxes_sum,
         'profits_sum': profits_sum,
+        'previous_sum': round(previous_sum, 2),
     }
     return render(request, 'tyb/current_month.html', context)

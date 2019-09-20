@@ -31,16 +31,16 @@
                 </tr>
                 </thead>
                 <tbody>
+                <tr>
+                    <td></td>
+                    <td>Previous months.</td>
+                    <td>{{ previous_sum }}</td>
+                </tr>
                 {% for profit in profits %}
                     <tr>
                         <td>{{ profit.date }}</td>
-                        <td>
-                            {% for t in profit.transactions %}
-                                {{ t.description }} <b>{{ t.cash }}</b>
-                                <br>
-                            {% endfor %}
-                        </td>
-                        <td>{{ profit.transactions_sum }}</td>
+                        <td>{{ profit.description }}</td>
+                        <td>{{ profit.cash }}</td>
                     </tr>
                 {% endfor %}
                 </tbody>
@@ -61,13 +61,8 @@
                 {% for tax in taxes%}
                     <tr>
                         <td>{{ tax.date }}</td>
-                        <td>
-                            {% for t in tax.transactions %}
-                                {{ t.description }} <b>{{ t.cash }}</b>
-                                <br>
-                            {% endfor %}
-                        </td>
-                        <td>{{ tax.transactions_sum }}</td>
+                        <td>{{ tax.description }}</td>
+                        <td>{{ tax.cash }}</td>
                     </tr>
                 {% endfor %}
                 </tbody>
