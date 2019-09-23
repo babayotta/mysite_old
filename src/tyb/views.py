@@ -1,5 +1,6 @@
 import datetime
 from calendar import monthrange
+from django.http import JsonResponse
 from django.shortcuts import render
 from django.db.models import Sum, Q, Value as V
 from django.db.models.functions import Coalesce
@@ -92,7 +93,7 @@ def current_month(request):
     return render(request, 'tyb/current_month.html', context)
 
 
-def api(request):
+def tyb_api(request):
     today = datetime.date.today()
     user = request.user
     _, number_of_days = monthrange(today.year, today.month)
@@ -181,4 +182,4 @@ def api(request):
         'profits_total': transactions_sums['profits_total'],
         'previous_total_sum': previous_total_sum,
     }
-    return render(request, 'tyb/current_month.html', table)
+    return JsonResponse(table)
