@@ -24,9 +24,9 @@ def current_month(request):
 
     transactions = Transaction.objects.filter(user=user, date__year=today.year, date__month=today.month)
 
-    buy_transactions = transactions.filter(transaction_type=Transaction.BUY)
-    tax_transactions = transactions.filter(transaction_type=Transaction.TAX).order_by('date')
-    profit_transactions = transactions.filter(transaction_type=Transaction.PROFIT).order_by('date')
+    buy_transactions = list(transactions.filter(transaction_type=Transaction.BUY).order_by('date'))
+    tax_transactions = list(transactions.filter(transaction_type=Transaction.TAX).order_by('date'))
+    profit_transactions = list(transactions.filter(transaction_type=Transaction.PROFIT).order_by('date'))
 
     transactions_sums = transactions.aggregate(
         profit_sum=Coalesce(Sum('cash', filter=Q(transaction_type=Transaction.PROFIT)), V(0)),
@@ -49,14 +49,22 @@ def current_month(request):
     buys = []
     for day in range(number_of_days):
         date = today.replace(day=day+1)
-        buy_transactions_for_date = buy_transactions.filter(date=date)
+        buy_for_day = 0
+        buy_transactions_for_date = []
+        for transaction in buy_transactions:
+            if transaction.date == date:
+                buy_transactions_for_date.append(transaction)
+                buy_for_day += transaction.cash
 
-        profit_for_day = profit_transactions.filter(date=date).aggregate(
-            cash=Coalesce(Sum('cash'), V(0)))['cash']
-        tax_for_day = tax_transactions.filter(date=date).aggregate(
-            cash=Coalesce(Sum('cash'), V(0)))['cash']
-        buy_for_day = buy_transactions.filter(date=date).aggregate(
-            cash=Coalesce(Sum('cash'), V(0)))['cash']
+        profit_for_day = 0
+        for transaction in profit_transactions:
+            if transaction.date == date:
+                profit_for_day += transaction.cash
+
+        tax_for_day = 0
+        for transaction in tax_transactions:
+            if transaction.date == date:
+                tax_for_day += transaction.cash
 
         budget_for_day = (profit_for_day - tax_for_day + balance_for_day) / remaining_days
         for i in range(day, number_of_days):
