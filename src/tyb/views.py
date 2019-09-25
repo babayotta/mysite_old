@@ -158,19 +158,31 @@ def tyb_api(request):
 
         buys.append({
             'date': date,
-            'transactions': buy_transactions_for_day,
+            'transactions': [{
+                'pk': transaction.pk,
+                'description': transaction.description,
+                'cash': transaction.cash,
+            } for transaction in buy_transactions_for_day],
             'budget_for_day': budget_for_days[day],
             'balance_for_day': balance_for_previous_day,
         })
         if tax_transactions_for_day:
             taxes.append({
                 'date': date,
-                'transactions': tax_transactions_for_day,
+                'transactions': [{
+                    'pk': transaction.pk,
+                    'description': transaction.description,
+                    'cash': transaction.cash,
+                } for transaction in tax_transactions_for_day],
             })
         if profit_transactions_for_day:
             profits.append({
                 'date': date,
-                'transactions': profit_transactions_for_day,
+                'transactions': [{
+                    'pk': transaction.pk,
+                    'description': transaction.description,
+                    'cash': transaction.cash,
+                } for transaction in profit_transactions_for_day],
             })
 
     table = {
