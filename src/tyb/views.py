@@ -1,9 +1,10 @@
 import datetime
 from calendar import monthrange
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render
 from django.db.models import Sum, Q, Value as V
 from django.db.models.functions import Coalesce
+from django.template.loader import render_to_string
 from tyb.models import Transaction
 
 
@@ -115,4 +116,4 @@ def tyb_api(request):
         'profits_total': transactions_sums['profits_total'],
         'previous_total_sum': previous_total_sum,
     }
-    return JsonResponse(table)
+    return HttpResponse(render_to_string('tyb/table.html', table))
