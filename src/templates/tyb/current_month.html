@@ -1,5 +1,7 @@
 {% extends 'tyb/base.html' %}
 
+{% load static %}
+
 {% block title %}Current Month{% endblock %}
 
 {% block main %}
@@ -20,7 +22,7 @@
 
 {#        <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>#}
 
-        <h2>Profits/Total: {{ profits_total }}</h2>
+        <h2 id="profits_total">Profits/Total: </h2>
         <div class="table-responsive">
             <table class="table table-striped table-sm">
                 <thead>
@@ -30,24 +32,17 @@
                     <th>Cash</th>
                 </tr>
                 </thead>
-                <tbody>
+                <tbody id="profits">
                 <tr>
                     <td></td>
                     <td>Previous months.</td>
-                    <td>{{ previous_total_sum }}</td>
+                    <td id="previous_total_sum"></td>
                 </tr>
-                {% for profit in profits %}
-                    <tr>
-                        <td>{{ profit.date }}</td>
-                        <td>{{ profit.description }}</td>
-                        <td>{{ profit.cash }}</td>
-                    </tr>
-                {% endfor %}
                 </tbody>
             </table>
         </div>
 
-        <h2>Taxes/Total: {{ taxes_total }}</h2>
+        <h2 id="taxes_total">Taxes/Total: </h2>
         <div class="table-responsive">
             <table class="table table-striped table-sm">
                 <thead>
@@ -57,19 +52,12 @@
                     <th>Cash</th>
                 </tr>
                 </thead>
-                <tbody>
-                {% for tax in taxes%}
-                    <tr>
-                        <td>{{ tax.date }}</td>
-                        <td>{{ tax.description }}</td>
-                        <td>{{ tax.cash }}</td>
-                    </tr>
-                {% endfor %}
+                <tbody id="taxes">
                 </tbody>
             </table>
         </div>
 
-        <h2>Buys/Total: {{ buys_total }}</h2>
+        <h2 id="buys_total">Buys/Total: </h2>
         <div class="table-responsive">
             <table class="table table-striped table-sm">
                 <thead>
@@ -81,23 +69,13 @@
                     <th>Balance</th>
                 </tr>
                 </thead>
-                <tbody>
-                {% for buy in buys %}
-                    <tr>
-                        <td>{{ buy.date }}</td>
-                        <td>
-                            {% for t in buy.transactions %}
-                                {{ t.description }} <b>{{ t.cash }}</b>
-                                <br>
-                            {% endfor %}
-                        </td>
-                        <td>{{ buy.transactions_sum }}</td>
-                        <td>{{ buy.budget_for_day }}</td>
-                        <td>{{ buy.balance_for_day }}</td>
-                    </tr>
-                {% endfor %}
+                <tbody id="buys">
                 </tbody>
             </table>
         </div>
     </main>
+{% endblock %}
+
+{% block custom_js %}
+    <script src="{% static 'tyb/tyb_ajax.js' %}" crossorigin="anonymous"></script>
 {% endblock %}

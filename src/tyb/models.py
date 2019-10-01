@@ -4,35 +4,6 @@ from django.conf import settings
 from users.models import CustomUser
 
 
-class TransactionManager(models.Manager):
-
-    def get_queryset(self, user: CustomUser):
-        return super(TransactionManager, self).get_queryset().filter(user=user)
-
-    def get_transactions_for_year(self, user: CustomUser, date: datetime.date):
-        return self.get_queryset(user).filter(date__year=date.year)
-
-    def get_transactions_for_month(self, user: CustomUser, date: datetime.date):
-        return self.get_transactions_for_year(user, date).filter(date__month=date.month)
-
-    def get_transactions_by_type_for_month(
-            self,
-            user: CustomUser,
-            date: datetime.date,
-            transaction_type: str
-    ):
-        return self.get_transactions_for_month(user, date).filter(transaction_type=transaction_type)
-
-    def get_sum_of_transactions_by_type_for_month(
-            self,
-            user: CustomUser,
-            date: datetime.date,
-            transaction_type: str
-    ):
-        return self.get_transactions_by_type_for_month(
-            user, date, transaction_type).aggregate(models.Sum('cash'))
-
-
 class Transaction(models.Model):
     PROFIT = 'P'
     TAX = 'T'
@@ -51,8 +22,6 @@ class Transaction(models.Model):
         choices=TRANSACTION_TYPES,
         default=BUY
     )
-    objects = models.Manager()
-    user_transactions = TransactionManager()
 
     def __str__(self):
         return '{} - {} - {} - {}'.format(
