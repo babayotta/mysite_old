@@ -12,10 +12,6 @@ def current_month(request):
     if not request.user.is_authenticated:
         return render(request, 'mysite/home.html')
 
-    return render(request, 'tyb/current_month.html', {})
-
-
-def tyb_api(request):
     today = datetime.date.today()
     user = request.user
     _, number_of_days = monthrange(today.year, today.month)
@@ -116,4 +112,5 @@ def tyb_api(request):
         'profits_total': transactions_sums['profits_total'],
         'previous_total_sum': previous_total_sum,
     }
-    return HttpResponse(render_to_string('tyb/table.html', table))
+
+    return render(request, 'tyb/current_month.html', table)
