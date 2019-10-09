@@ -8,7 +8,7 @@ from django.template.loader import render_to_string
 from tyb.models import Transaction
 
 
-def current_month(request):
+def list_of_transactions(request):
     if not request.user.is_authenticated:
         return render(request, 'mysite/home.html')
 
@@ -77,7 +77,7 @@ def current_month(request):
         buys.append({
             'date': date,
             'transactions': [{
-                'pk': transaction.pk,
+                'pk': transaction.id,
                 'description': transaction.description,
                 'cash': transaction.cash,
             } for transaction in buy_transactions_for_day],
@@ -88,7 +88,7 @@ def current_month(request):
             taxes.append({
                 'date': date,
                 'transactions': [{
-                    'pk': transaction.pk,
+                    'pk': transaction.id,
                     'description': transaction.description,
                     'cash': transaction.cash,
                 } for transaction in tax_transactions_for_day],
@@ -97,7 +97,7 @@ def current_month(request):
             profits.append({
                 'date': date,
                 'transactions': [{
-                    'pk': transaction.pk,
+                    'pk': transaction.id,
                     'description': transaction.description,
                     'cash': transaction.cash,
                 } for transaction in profit_transactions_for_day],
@@ -114,3 +114,7 @@ def current_month(request):
     }
 
     return render(request, 'tyb/current_month.html', table)
+
+
+def change_transaction(request):
+    pass
