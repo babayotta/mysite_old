@@ -1,0 +1,9 @@
+{% extends 'tyb/base.html' %}
+
+{% block main %}
+    <form action="{% url 'tyb:new_transaction' %}" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Send">
+    </form>
+{% endblock %}

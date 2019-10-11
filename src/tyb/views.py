@@ -1,11 +1,12 @@
 import datetime
 from calendar import monthrange
 from django.http import JsonResponse, HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.db.models import Sum, Q, Value as V
 from django.db.models.functions import Coalesce
 from django.template.loader import render_to_string
 from tyb.models import Transaction
+from tyb.forms import TransactionForm
 
 
 def list_of_transactions(request):
@@ -77,18 +78,18 @@ def list_of_transactions(request):
         buys.append({
             'date': date,
             'transactions': [{
-                'pk': transaction.id,
+                'id': transaction.id,
                 'description': transaction.description,
                 'cash': transaction.cash,
             } for transaction in buy_transactions_for_day],
-            'budget_for_day': budget_for_days[day],
-            'balance_for_day': balance_for_previous_day,
+            'budget_for_day': round(budget_for_days[day], 2),
+            'balance_for_day': round(balance_for_previous_day, 2),
         })
         if tax_transactions_for_day:
             taxes.append({
                 'date': date,
                 'transactions': [{
-                    'pk': transaction.id,
+                    'id': transaction.id,
                     'description': transaction.description,
                     'cash': transaction.cash,
                 } for transaction in tax_transactions_for_day],
@@ -97,7 +98,7 @@ def list_of_transactions(request):
             profits.append({
                 'date': date,
                 'transactions': [{
-                    'pk': transaction.id,
+                    'id': transaction.id,
                     'description': transaction.description,
                     'cash': transaction.cash,
                 } for transaction in profit_transactions_for_day],
@@ -113,8 +114,24 @@ def list_of_transactions(request):
         'previous_total_sum': previous_total_sum,
     }
 
-    return render(request, 'tyb/current_month.html', table)
+    return render(request, 'tyb/list_of_transactions.html', table)
 
 
-def change_transaction(request):
-    pass
+def change_transaction(request, transaction_id):
+    transaction = get_object_or_404(Transaction, id=transaction_id)
+    form = TransactionForm(initial={
+        'date': transaction.date,
+        'transaction_type': transaction.transaction_type,
+        'description': transaction.description,
+    }, instance=transaction)
+    return render(request, 'tyb/change_transaction.html', {'form': form})
+
+
+def new_transaction(request):
+    if request.method == 'POST':
+        form = TransactionForm(request.POST)
+        if form.is_valid():
+            return HttpResponse('Form is valid')
+    else:
+        form = TransactionForm
+    return render(request, 'tyb/change_transaction.html', {'form': form})
