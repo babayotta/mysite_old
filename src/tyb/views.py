@@ -118,20 +118,36 @@ def list_of_transactions(request):
 
 
 def change_transaction(request, transaction_id):
-    transaction = get_object_or_404(Transaction, id=transaction_id)
-    form = TransactionForm(initial={
-        'date': transaction.date,
-        'transaction_type': transaction.transaction_type,
-        'description': transaction.description,
-    }, instance=transaction)
-    return render(request, 'tyb/change_transaction.html', {'form': form})
+    if request.method == 'POST':
+        transaction = get_object_or_404(Transaction, id=transaction_id)
+        form = TransactionForm(request.POST, instance=transaction)
+        if form.is_valid():
+            t = form.save(commit=False)
+            t.user = request.user
+            t.save()
+            return list_of_transactions(request)
+        else:
+            print(form.errors)
+    else:
+        transaction = get_object_or_404(Transaction, id=transaction_id)
+        form = TransactionForm(initial={
+            'date': transaction.date,
+            'transaction_type': transaction.transaction_type,
+            'description': transaction.description,
+        }, instance=transaction)
+    return render(request, 'tyb/transaction.html', {'form': form, 'action_url': request.path})
 
 
 def new_transaction(request):
     if request.method == 'POST':
         form = TransactionForm(request.POST)
         if form.is_valid():
-            return HttpResponse('Form is valid')
+            t = form.save(commit=False)
+            t.user = request.user
+            t.save()
+            return list_of_transactions(request)
+        else:
+            print(form.errors)
     else:
         form = TransactionForm
-    return render(request, 'tyb/change_transaction.html', {'form': form})
+    return render(request, 'tyb/transaction.html', {'form': form, 'action_url': request.path})
