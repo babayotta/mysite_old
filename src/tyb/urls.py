@@ -5,5 +5,6 @@ app_name = 'tyb'
 urlpatterns = [
     path('', views.list_of_transactions, name='list_of_transactions'),
     path('change_transaction/<int:transaction_id>', views.change_transaction, name='change_transaction'),
+    path('delete_transaction/<int:transaction_id>', views.delete_transaction, name='delete_transaction'),
     path('new_transaction', views.new_transaction, name='new_transaction'),
 ]

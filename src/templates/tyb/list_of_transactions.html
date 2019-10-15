@@ -2,7 +2,9 @@
 
 {% load static %}
 
-{% block title %}Current Month{% endblock %}
+{% block title %}
+    Current Month
+{% endblock %}
 
 {% block main %}
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
@@ -45,6 +47,9 @@
                             <a href="{% url 'tyb:change_transaction' transaction.id %}">
                                 {{ transaction.description }}
                             </a>
+                            <a class="delete_transaction" href="{% url 'tyb:delete_transaction' transaction.id %}">
+                                <span data-feather="trash"></span>
+                            </a>
                             <br>
                         {% endfor %}
                     </td>
@@ -78,6 +83,9 @@
                         {% for transaction in tax.transactions %}
                             <a href="{% url 'tyb:change_transaction' transaction.id %}">
                                 {{ transaction.description }}
+                            </a>
+                            <a class="delete_transaction" href="{% url 'tyb:delete_transaction' transaction.id %}">
+                                <span data-feather="trash"></span>
                             </a>
                             <br>
                         {% endfor %}
@@ -115,6 +123,9 @@
                             <a href="{% url 'tyb:change_transaction' transaction.id %}">
                                 {{ transaction.description }}
                             </a>
+                            <a class="delete_transaction" href="{% url 'tyb:delete_transaction' transaction.id %}">
+                                <span data-feather="trash"></span>
+                            </a>
                             <br>
                         {% endfor %}
                     </td>
@@ -134,4 +145,14 @@
 {% endblock %}
 
 {% block custom_js %}
+    <script>
+    $(document).ready(function () {
+        $('.delete_transaction').on('click', function () {
+            let confirm = window.confirm('Are you sure to delete a transaction?');
+            if(!confirm) {
+                return false;
+            }
+        });
+    });
+    </script>
 {% endblock %}
