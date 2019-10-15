@@ -8,3 +8,6 @@ class TransactionForm(forms.ModelForm):
         model = Transaction
         fields = ['date', 'transaction_type', 'description', 'cash']
         user = forms.ModelChoiceField(queryset=CustomUser.objects.all(), widget=forms.HiddenInput())
+        widgets = {
+            'date': forms.SelectDateWidget(),
+        }
