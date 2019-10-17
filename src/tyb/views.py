@@ -108,9 +108,9 @@ def list_of_transactions(request):
         'buys': buys,
         'taxes': taxes,
         'profits': profits,
-        'buys_total': transactions_sums['buys_total'],
-        'taxes_total': transactions_sums['taxes_total'],
-        'profits_total': transactions_sums['profits_total'],
+        'buys_total': round(transactions_sums['buys_total'], 2),
+        'taxes_total': round(transactions_sums['taxes_total'], 2),
+        'profits_total': round(transactions_sums['profits_total'], 2),
         'previous_total_sum': round(previous_total_sum, 2),
     }
 
