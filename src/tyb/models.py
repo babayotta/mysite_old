@@ -16,7 +16,7 @@ class Transaction(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     date = models.DateField(default=datetime.date.today)
     description = models.CharField(max_length=300, default='Some description.')
-    cash = models.FloatField(default=0)
+    value = models.FloatField(default=0)
     transaction_type = models.CharField(
         max_length=1,
         choices=TRANSACTION_TYPES,
@@ -24,9 +24,11 @@ class Transaction(models.Model):
     )
 
     def __str__(self):
-        return '{} - {} - {} - {}'.format(
+        return '{} - {} - {} - {} - {} - {}'.format(
+            self.id,
             self.date,
             self.get_transaction_type_display(),
-            self.cash,
+            self.value,
             self.description,
+            self.user,
         )

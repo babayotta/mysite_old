@@ -30,7 +30,7 @@
             <tr>
                 <th>Date</th>
                 <th>Description</th>
-                <th>Cash</th>
+                <th>Value</th>
             </tr>
             </thead>
             <tbody>
@@ -55,7 +55,7 @@
                     </td>
                     <td>
                         {% for transaction in profit.transactions %}
-                            {{ transaction.cash }}
+                            {{ transaction.value }}
                             <br>
                         {% endfor %}
                     </td>
@@ -72,7 +72,7 @@
             <tr>
                 <th>Date</th>
                 <th>Description</th>
-                <th>Cash</th>
+                <th>Value</th>
             </tr>
             </thead>
             <tbody>
@@ -92,7 +92,7 @@
                     </td>
                     <td>
                         {% for transaction in tax.transactions %}
-                            {{ transaction.cash }}
+                            {{ transaction.value }}
                             <br>
                         {% endfor %}
                     </td>
@@ -109,7 +109,7 @@
             <tr>
                 <th>Date</th>
                 <th>Description</th>
-                <th>Cash</th>
+                <th>Value</th>
                 <th>Budget for day</th>
                 <th>Balance</th>
             </tr>
@@ -131,7 +131,7 @@
                     </td>
                     <td>
                         {% for transaction in buy.transactions %}
-                            {{ transaction.cash }}
+                            {{ transaction.value }}
                             <br>
                         {% endfor %}
                     </td>
