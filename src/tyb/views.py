@@ -1,10 +1,8 @@
 import datetime
 from calendar import monthrange
-from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Sum, Q, Value as V
 from django.db.models.functions import Coalesce
-from django.template.loader import render_to_string
 from tyb.models import Transaction
 from tyb.forms import TransactionForm
 
