@@ -41,7 +41,7 @@
             </tr>
             {% for profit in profits %}
                 <tr>
-                    <td>{{ profit.date }}</td>
+                    <td>{{ profit.date|date:"M/d" }}</td>
                     <td>
                         {% for transaction in profit.transactions %}
                             <a href="{% url 'tyb:change_transaction' transaction.id %}">
@@ -78,7 +78,7 @@
             <tbody>
             {% for tax in taxes %}
                 <tr>
-                    <td>{{ tax.date }}</td>
+                    <td>{{ tax.date|date:"M/d" }}</td>
                     <td>
                         {% for transaction in tax.transactions %}
                             <a href="{% url 'tyb:change_transaction' transaction.id %}">
@@ -117,7 +117,7 @@
             <tbody>
             {% for buy in buys %}
                 <tr>
-                    <td>{{ buy.date }}</td>
+                    <td>{{ buy.date|date:"M/d" }}</td>
                     <td>
                         {% for transaction in buy.transactions %}
                             <a href="{% url 'tyb:change_transaction' transaction.id %}">
