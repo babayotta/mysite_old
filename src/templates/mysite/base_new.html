@@ -51,14 +51,23 @@
     <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-                <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item active">
-                <a class="nav-link" href="{% url 'tyb:list_of_transactions' %}">Track Your Budget</a>
+                <a class="nav-link" href="{% url 'tyb:list_of_transactions' %}">TrackYourMoney</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link disabled" href="#">Disabled</a>
+                <a class="nav-link disabled" href="#">About</a>
             </li>
+            {% if user.is_authenticated %}
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                </li>
+            {% else %}
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'login' %}">Login</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'signup' %}">Signup</a>
+                </li>
+            {% endif %}
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="dropdown01"
                    data-toggle="dropdown" aria-haspopup="true"
@@ -70,16 +79,6 @@
                 </div>
             </li>
         </ul>
-        <div class="form-inline">
-            {% if user.is_authenticated %}
-                <span class="navbar-text">Hi {{ user.username }}!</span>
-                <a class="nav-link" href="{% url 'logout' %}">Logout</a>
-            {% else %}
-                <span class="navbar-text">You are not logged in</span>
-                <a class="nav-link" href="{% url 'login' %}">Login</a>
-                <a class="nav-link" href="{% url 'signup' %}">Signup</a>
-            {% endif %}
-        </div>
     </div>
 </nav>
 {% block content %}
