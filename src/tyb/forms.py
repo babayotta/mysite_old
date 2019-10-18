@@ -10,4 +10,5 @@ class TransactionForm(forms.ModelForm):
         user = forms.ModelChoiceField(queryset=CustomUser.objects.all(), widget=forms.HiddenInput())
         widgets = {
             'date': forms.SelectDateWidget(),
+            'description': forms.Textarea(attrs={'rows': 4})
         }
