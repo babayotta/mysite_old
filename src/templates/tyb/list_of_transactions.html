@@ -1,4 +1,4 @@
-{% extends 'tyb/base.html' %}
+{% extends 'tyb/base_new.html' %}
 
 {% load static %}
 
@@ -144,7 +144,7 @@
     </div>
 {% endblock %}
 
-{% block custom_js %}
+{% block custom_script %}
     <script>
     $(document).ready(function () {
         $('.delete_transaction').on('click', function () {
