@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  postgres:
+    build:
+      context: postgres
+    volumes:
+      - db_data:/var/lib/postgresql/data/
+    restart: always
+    ports:
+      - 127.0.0.1:5432:5432
+
+  django:
+    build:
+      context: ../
+      dockerfile: docker/django/Dockerfile
+    volumes:
+      - src:/src
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+    links:
+      - postgres
+    command: python manage.py runserver 0.0.0.0:8000
+
+volumes:
+  db_data: {}
+  src: {}
