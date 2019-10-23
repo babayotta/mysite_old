@@ -22,7 +22,7 @@ services:
       - postgres
     links:
       - postgres
-    command: python manage.py runserver 0.0.0.0:8000
+    command: ./run.sh
 
 volumes:
   db_data: {}
