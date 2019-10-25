@@ -15,14 +15,14 @@ services:
       context: ../
       dockerfile: docker/django/Dockerfile
     volumes:
-      - src:/src
+      - ../src:/src
     ports:
       - "8000:8000"
     depends_on:
       - postgres
     links:
       - postgres
-    command: ./run.sh
+    command: /src/run.sh
 
 volumes:
   db_data: {}
