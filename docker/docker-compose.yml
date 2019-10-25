@@ -16,14 +16,28 @@ services:
       dockerfile: docker/django/Dockerfile
     volumes:
       - ../src:/src
+      - sock:/sock
     ports:
       - "8000:8000"
+      - "8001:8001"
     depends_on:
       - postgres
     links:
       - postgres
-    command: /src/run.sh
+
+  nginx:
+    restart: always
+    volumes:
+      - ../src:/src
+      - sock:/sock
+    build:
+      context: nginx
+    depends_on: 
+      - django
+    ports:
+      - "80:80"
 
 volumes:
   db_data: {}
   src: {}
+  sock: {}
