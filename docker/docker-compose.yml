@@ -1,43 +1,42 @@
-version: '3'
+version: '3.3'
 
 services:
   postgres:
+    restart: always
     build:
       context: postgres
     volumes:
       - db_data:/var/lib/postgresql/data/
-    restart: always
     ports:
       - 127.0.0.1:5432:5432
 
   django:
+    restart: always
     build:
       context: ../
       dockerfile: docker/django/Dockerfile
     volumes:
       - ../src:/src
-      - sock:/sock
-    ports:
-      - "8000:8000"
-      - "8001:8001"
     depends_on:
       - postgres
     links:
       - postgres
+    ports:
+      - 127.0.0.1:9001:9000
 
   nginx:
     restart: always
-    volumes:
-      - ../src:/src
-      - sock:/sock
     build:
       context: nginx
+    volumes:
+      - ../src:/src
     depends_on: 
       - django
+    links:
+      - django
     ports:
-      - "80:80"
+      - 80:80
 
 volumes:
   db_data: {}
   src: {}
-  sock: {}
