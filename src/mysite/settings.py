@@ -131,3 +131,5 @@ STATICFILES_DIRS = [
 AUTH_USER_MODEL = 'users.CustomUser'
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
+
+from mysite.settings_local import *
