@@ -1,8 +1,5 @@
 FROM nginx
  
-RUN mkdir /code
-RUN mkdir /sock
- 
 #ENV TZ=UTC
 #RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
  

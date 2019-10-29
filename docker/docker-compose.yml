@@ -16,7 +16,7 @@ services:
       context: ../
       dockerfile: docker/django/Dockerfile
     volumes:
-      - ../src:/src
+      - static:/src/static/
     depends_on:
       - postgres
     links:
@@ -29,7 +29,7 @@ services:
     build:
       context: nginx
     volumes:
-      - ../src:/src
+      - static:/src/static/
     depends_on: 
       - django
     links:
@@ -39,4 +39,4 @@ services:
 
 volumes:
   db_data: {}
-  src: {}
+  static: {}

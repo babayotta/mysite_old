@@ -25,7 +25,7 @@ SECRET_KEY = '^w=usypsb&%1l%(fa&)by(b*mm+)-3nc02p^bvlc%+xxhxa-ju'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -122,8 +122,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static"),
+    os.path.join(BASE_DIR, "mysite/static"),
+    os.path.join(BASE_DIR, "tyb/static"),
 ]
 
 
@@ -132,4 +134,5 @@ AUTH_USER_MODEL = 'users.CustomUser'
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
 
-from mysite.settings_local import *
+if DEBUG:
+    from mysite.settings_local import *
