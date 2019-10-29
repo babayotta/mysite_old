@@ -134,5 +134,4 @@ AUTH_USER_MODEL = 'users.CustomUser'
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
 
-if DEBUG:
-    from mysite.settings_local import *
+from mysite.settings_local import *
