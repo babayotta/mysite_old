@@ -13,4 +13,6 @@ WORKDIR /src
 RUN pip install -U pip
 RUN pip install -Ur requirements.txt
 
+RUN mkdir /src/mysite/settings_local/
+
 ENTRYPOINT ["./run.sh"]

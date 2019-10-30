@@ -1,4 +1,5 @@
 **/*.pyc
 **/*.pyo
 **/settings_local.py
+**/settings_local
 
