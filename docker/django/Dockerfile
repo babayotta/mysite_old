@@ -11,6 +11,7 @@ COPY src /src
 WORKDIR /src
 
 RUN mkdir /src/mysite/settings_local/
+RUN mkdir /src/static/
 RUN chown www-data:www-data -R /src
 
 RUN pip install -U pip
