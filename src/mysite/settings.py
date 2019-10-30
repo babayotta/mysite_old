@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'users.apps.UsersConfig',
-    'tyb.apps.TybConfig',
+    'trym.apps.TrymConfig',
 ]
 
 MIDDLEWARE = [
@@ -125,7 +125,7 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "mysite/static"),
-    os.path.join(BASE_DIR, "tyb/static"),
+    os.path.join(BASE_DIR, "trym/static"),
 ]
 
 

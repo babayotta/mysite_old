@@ -1,7 +1,7 @@
 from django.urls import path
-from tyb import views
+from trym import views
 
-app_name = 'tyb'
+app_name = 'trym'
 urlpatterns = [
     path('', views.list_of_transactions, name='list_of_transactions'),
     path('change_transaction/<int:transaction_id>', views.change_transaction, name='change_transaction'),

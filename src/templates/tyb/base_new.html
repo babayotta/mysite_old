@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block custom_style %}
-    <link href="{% static 'tyb/base.css' %}" rel="stylesheet">
+    <link href="{% static 'trym/base.css' %}" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
@@ -17,13 +17,13 @@
                 <div class="sidebar-sticky">
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link active" href="{% url 'tyb:list_of_transactions' %}">
+                            <a class="nav-link active" href="{% url 'trym:list_of_transactions' %}">
                                 <span data-feather="home"></span>
                                 Dashboard <span class="sr-only">(current)</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'tyb:new_transaction' %}">
+                            <a class="nav-link" href="{% url 'trym:new_transaction' %}">
                                 <span data-feather="plus-circle"></span>
                                 New Transaction
                             </a>

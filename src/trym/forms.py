@@ -1,5 +1,5 @@
 from django import forms
-from tyb.models import Transaction
+from trym.models import Transaction
 from users.models import CustomUser
 
 

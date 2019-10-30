@@ -6,7 +6,7 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('tyb', '0005_auto_20190909_0739'),
+        ('trym', '0005_auto_20190909_0739'),
     ]
 
     operations = [

@@ -1,6 +1,6 @@
 import random
 import factory
-from tyb.models import Transaction
+from trym.models import Transaction
 from users.tests.factories import CustomUserFactory
 
 

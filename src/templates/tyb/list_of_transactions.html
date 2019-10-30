@@ -1,4 +1,4 @@
-{% extends 'tyb/base_new.html' %}
+{% extends 'trym/base_new.html' %}
 
 {% load static %}
 
@@ -44,10 +44,10 @@
                     <td>{{ profit.date|date:"M/d" }}</td>
                     <td>
                         {% for transaction in profit.transactions %}
-                            <a href="{% url 'tyb:change_transaction' transaction.id %}">
+                            <a href="{% url 'trym:change_transaction' transaction.id %}">
                                 {{ transaction.description }}
                             </a>
-                            <a class="delete_transaction" href="{% url 'tyb:delete_transaction' transaction.id %}">
+                            <a class="delete_transaction" href="{% url 'trym:delete_transaction' transaction.id %}">
                                 <span data-feather="trash"></span>
                             </a>
                             <br>
@@ -81,10 +81,10 @@
                     <td>{{ tax.date|date:"M/d" }}</td>
                     <td>
                         {% for transaction in tax.transactions %}
-                            <a href="{% url 'tyb:change_transaction' transaction.id %}">
+                            <a href="{% url 'trym:change_transaction' transaction.id %}">
                                 {{ transaction.description }}
                             </a>
-                            <a class="delete_transaction" href="{% url 'tyb:delete_transaction' transaction.id %}">
+                            <a class="delete_transaction" href="{% url 'trym:delete_transaction' transaction.id %}">
                                 <span data-feather="trash"></span>
                             </a>
                             <br>
@@ -120,10 +120,10 @@
                     <td>{{ buy.date|date:"M/d" }}</td>
                     <td>
                         {% for transaction in buy.transactions %}
-                            <a href="{% url 'tyb:change_transaction' transaction.id %}">
+                            <a href="{% url 'trym:change_transaction' transaction.id %}">
                                 {{ transaction.description }}
                             </a>
-                            <a class="delete_transaction" href="{% url 'tyb:delete_transaction' transaction.id %}">
+                            <a class="delete_transaction" href="{% url 'trym:delete_transaction' transaction.id %}">
                                 <span data-feather="trash"></span>
                             </a>
                             <br>

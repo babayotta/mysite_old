@@ -3,8 +3,8 @@ from calendar import monthrange
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Sum, Q, Value as V
 from django.db.models.functions import Coalesce
-from tyb.models import Transaction
-from tyb.forms import TransactionForm
+from trym.models import Transaction
+from trym.forms import TransactionForm
 
 
 def list_of_transactions(request):
@@ -112,7 +112,7 @@ def list_of_transactions(request):
         'previous_total_sum': round(previous_total_sum, 2),
     }
 
-    return render(request, 'tyb/list_of_transactions.html', table)
+    return render(request, 'trym/list_of_transactions.html', table)
 
 
 def change_transaction(request, transaction_id):
@@ -133,7 +133,7 @@ def change_transaction(request, transaction_id):
             'transaction_type': transaction.transaction_type,
             'description': transaction.description,
         }, instance=transaction)
-    return render(request, 'tyb/transaction.html', {'form': form, 'action_url': request.path})
+    return render(request, 'trym/transaction.html', {'form': form, 'action_url': request.path})
 
 
 def new_transaction(request):
@@ -148,7 +148,7 @@ def new_transaction(request):
             print(form.errors)
     else:
         form = TransactionForm
-    return render(request, 'tyb/transaction.html', {'form': form, 'action_url': request.path})
+    return render(request, 'trym/transaction.html', {'form': form, 'action_url': request.path})
 
 
 def delete_transaction(request, transaction_id):
