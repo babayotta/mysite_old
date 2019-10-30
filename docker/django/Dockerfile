@@ -14,5 +14,8 @@ RUN pip install -U pip
 RUN pip install -Ur requirements.txt
 
 RUN mkdir /src/mysite/settings_local/
+RUN chown www-data:www-data -R /src
+
+USER www-data
 
 ENTRYPOINT ["./run.sh"]
