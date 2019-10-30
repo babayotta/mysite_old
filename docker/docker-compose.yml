@@ -16,7 +16,7 @@ services:
       context: ../
       dockerfile: docker/django/Dockerfile
     volumes:
-      - settings:/src/mysite/settings_local/
+      - ../src/mysite/settings_local:/src/mysite/settings_local/
       - static:/src/static/
     depends_on:
       - postgres
@@ -40,5 +40,4 @@ services:
 
 volumes:
   db_data: {}
-  settings: {}
   static: {}
