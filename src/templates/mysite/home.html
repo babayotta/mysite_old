@@ -9,21 +9,23 @@
         <!-- Main jumbotron for a primary marketing message or call to action -->
         <div class="jumbotron">
             <div class="container">
-                <h1 class="display-3">Hello, world!</h1>
-                <p>This is a template for a simple marketing or informational website.
-                    It includes a large callout called a jumbotron and three supporting
-                    pieces of content. Use it as a starting point to create something more unique.</p>
-                <p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more &raquo;</a></p>
+                <h1 class="display-3">Итак!</h1>
+                <p>Приложенька служит для отслеживания собственных расходов.
+                Нужно только зарегестрироваться (мыло указывать не обязательно),
+                перейти на TrackYourMoney и заполнять табличку (не забудь добавить в закладки).</p>
+                {% if user.is_authenticated %}
+                    <p><a class="btn btn-primary btn-lg" href="{% url 'trym:list_of_transactions' %}" role="button">TrackYourMoney &raquo;</a></p>
+                {% else %}
+                    <p><a class="btn btn-primary btn-lg" href="{% url 'login' %}" role="button">Войти</a></p>
+                    <p><a class="btn btn-primary btn-lg" href="{% url 'signup' %}" role="button">Зарегаться</a></p>
+                {% endif %}
             </div>
         </div>
         <div class="container">
             {% if user.is_authenticated %}
-                Hi {{ user.username }}!
-                <p><a href="{% url 'logout' %}">logout</a></p>
+                <p>Привет, <b>{{ user.username }}!</b></p>
             {% else %}
-                <p>You are not logged in</p>
-                <a href="{% url 'login' %}">login</a> |
-                <a href="{% url 'signup' %}">signup</a>
+                <p>Привет, <b>незнакомец!</b></p>
             {% endif %}
         </div>
 {#    </main>#}
