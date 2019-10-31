@@ -5,14 +5,12 @@
 {% endblock %}
 
 {% block content %}
-{#    <main role="main">#}
-        <div class="container">
-            <h2>Регистрация</h2>
-            <form method="post">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <button type="submit">Зарегистрироваться</button>
-            </form>
-        </div> <!-- /container -->
-{#    </main>#}
+    <div class="container">
+        <h2>Регистрация</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Зарегистрироваться</button>
+        </form>
+    </div> <!-- /container -->
 {% endblock %}

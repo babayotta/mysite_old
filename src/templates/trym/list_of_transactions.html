@@ -2,28 +2,18 @@
 
 {% load static %}
 
-{% block title %}
-    Текущий месяц
-{% endblock %}
+{% block title %}Текущий месяц{% endblock %}
 
 {% block main %}
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">Бюджет на текущий месяц</h1>
-        <div class="btn-toolbar mb-2 mb-md-0">
-            <div class="btn-group mr-2">
-                <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
-                <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
-            </div>
-            <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
-                <span data-feather="calendar"></span>
-                This week
-            </button>
-        </div>
     </div>
 
-    {#        <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>#}
+    <h2>
+        <a class="btn btn-primary btn-lg" href="{% url 'trym:new_transaction' %}" role="button">+</a>
+        Доходы: {{ profits_total }}
+    </h2>
 
-    <h2>Доходы: {{ profits_total }}</h2>
     <div class="table-responsive">
         <table class="table table-striped table-sm">
             <thead>
@@ -36,7 +26,7 @@
             <tbody>
             <tr>
                 <td></td>
-                <td>Доход с предидущего месяца</td>
+                <td>Доход с предыдущего месяца</td>
                 <td>{{ previous_total_sum }}</td>
             </tr>
             {% for profit in profits %}
@@ -65,7 +55,10 @@
         </table>
     </div>
 
-    <h2>Обязательные расходы: {{ taxes_total }}</h2>
+    <h2>
+        <a class="btn btn-primary btn-lg" href="{% url 'trym:new_transaction' %}" role="button">+</a>
+        Расходы: {{ taxes_total }}
+    </h2>
     <div class="table-responsive">
         <table class="table table-striped table-sm">
             <thead>
@@ -102,7 +95,10 @@
         </table>
     </div>
 
-    <h2>Покупки: {{ buys_total }}</h2>
+    <h2>
+        <a class="btn btn-primary btn-lg" href="{% url 'trym:new_transaction' %}" role="button">+</a>
+        Траты: {{ buys_total }}
+    </h2>
     <div class="table-responsive">
         <table class="table table-striped table-sm">
             <thead>

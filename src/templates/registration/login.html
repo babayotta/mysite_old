@@ -3,14 +3,12 @@
 {% block title %}Вход{% endblock %}
 
 {% block content %}
-{#    <main role="main">#}
-        <div class="container">
-            <h2>Вход</h2>
-            <form method="post">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <button type="submit">Войти</button>
-            </form>
-        </div> <!-- /container -->
-{#    </main>#}
+    <div class="container">
+        <h2>Вход</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Войти</button>
+        </form>
+    </div> <!-- /container -->
 {% endblock %}
