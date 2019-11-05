@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'users.apps.UsersConfig',
     'trym.apps.TrymConfig',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [

@@ -3,6 +3,9 @@ from calendar import monthrange
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Sum, Q, Value as V
 from django.db.models.functions import Coalesce
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from trym.serializers import TransactionSerializer
 from trym.models import Transaction
 from trym.forms import TransactionForm
 
@@ -155,3 +158,46 @@ def delete_transaction(request, transaction_id):
     transaction = get_object_or_404(Transaction, id=transaction_id)
     transaction.delete()
     return list_of_transactions(request)
+
+
+class TransactionApi(APIView):
+    def get(self, request):
+        today = datetime.date.today()
+        user = request.user
+        transactions = Transaction.objects.filter(user=user,
+                                                  date__year=today.year,
+                                                  date__month=today.month)
+        serializer = TransactionSerializer(transactions, many=True)
+        return Response({'transactions': serializer.data})
+
+    def post(self, request):
+        user = request.user
+        transaction = request.data.get('transaction')
+        transaction['user_id'] = user.id
+
+        serializer = TransactionSerializer(data=transaction)
+        if serializer.is_valid(raise_exception=True):
+            transaction_saved = serializer.save()
+            return Response({
+                'success': 'Transaction "{}" created successfully'.format(transaction_saved.description)
+            })
+
+    def put(self, request, transaction_id):
+        user = request.user
+        saved_transaction = get_object_or_404(Transaction.objects.filter(user=user), id=transaction_id)
+        data = request.data.get('transaction')
+        serializer = TransactionSerializer(instance=saved_transaction, data=data, partial=True)
+
+        if serializer.is_valid(raise_exception=True):
+            transaction_saved = serializer.save()
+            return Response({
+                "success": "Transaction '{}' updated successfully".format(transaction_saved.description)
+            })
+
+    def delete(self, request, transaction_id):
+        user = request.user
+        transaction = get_object_or_404(Transaction.objects.filter(user=user), id=transaction_id)
+        transaction.delete()
+        return Response({
+            "message": "Transaction with id `{}` has been deleted.".format(transaction_id)
+        }, status=204)
