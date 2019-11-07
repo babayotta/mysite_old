@@ -133,62 +133,62 @@
     <div id="starting">
       <div class="container">
         <div class="row">
-          <h1>List of Articles
-          <button  type="button" class="btn btn-primary" data-toggle="modal" data-target="#addArticleModal">ADD ARTICLE</button>
+          <h1>List of Transactions
+          <button  type="button" class="btn btn-primary" data-toggle="modal" data-target="#addTransactionModal">ADD TRANSACTION</button>
           </h1>
           &emsp;
           <div class="form-inline my-2 my-lg-0" style="margin-left: 40%;">
             <input class="form-control mr-sm-2" type="text" placeholder="Search" v-model="search_term" aria-label="Search">
-            <button class="btn btn-outline-success my-2 my-sm-0" v-on:click.prevent="getArticles()">Search</button>
+            <button class="btn btn-outline-success my-2 my-sm-0" v-on:click.prevent="getTransactions()">Search</button>
           </div>
           <table class="table">
             <thead>
               <tr>
-                <th scope="col">#</th>
-                <th scope="col">Heading</th>
+                <th scope="col">ID</th>
+                <th scope="col">Description</th>
                 <th scope="col">Action</th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="article in articles">
-                <th scope="row">${article.article_id}</th>
-                <td>${article.article_heading}</td>
+              <tr v-for="transaction in transactions">
+                <th scope="row">${transaction.id}</th>
+                <td>${transaction.description}</td>
                 <td>
-                  <button class="btn btn-info" v-on:click="getArticle(article.article_id)">Edit</button>
-                  <button class="btn btn-danger" v-on:click="deleteArticle(article.article_id)">Delete</button>
+                  <button class="btn btn-info" v-on:click="getTransaction(transaction.id)">Edit</button>
+                  <button class="btn btn-danger" v-on:click="deleteTransaction(transaction.id)">Delete</button>
                 </td>
               </tr>
             </tbody>
           </table>
           <!-- Add Article Modal -->
-          <div class="modal fade" id="addArticleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+          <div class="modal fade" id="addTransactionModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
             <div class="modal-dialog" role="document">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLongTitle">ADD ARTICLE</h5>
+                  <h5 class="modal-title" id="exampleModalLongTitle">ADD TRANSACTION</h5>
                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                   </button>
                 </div>
-                <form v-on:submit.prevent="addArticle()">
+                <form v-on:submit.prevent="addTransaction()">
                 <div class="modal-body">
                     <div class="form-group">
-                      <label for="article_heading">Article Heading</label>
+                      <label for="transaction_description">Transaction Description</label>
                       <input
                         type="text"
                         class="form-control"
-                        id="article_heading"
-                        placeholder="Enter Article Heading"
-                        v-model="newArticle.article_heading"
+                        id="transaction_description"
+                        placeholder="Enter Transaction Description"
+                        v-model="newTransaction.description"
                         required="required" >
                     </div>
                     <div class="form-group">
-                      <label for="article_body">Article Body</label>
+                      <label for="transaction_type">Transaction Type</label>
                       <textarea
                         class="form-control"
-                        id="article_body"
-                        placeholder="Enter Article Body"
-                        v-model="newArticle.article_body"
+                        id="transaction_type"
+                        placeholder="Enter Transaction Type"
+                        v-model="newTransaction.transaction_type"
                         required="required"
                         rows="3"></textarea>
                     </div>
@@ -204,34 +204,34 @@
           </div>
           <!-- End of add article modal -->
           <!-- Edit Article Modal -->
-          <div class="modal fade" id="editArticleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+          <div class="modal fade" id="editTransactionModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
             <div class="modal-dialog" role="document">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLongTitle">EDIT ARTICLE</h5>
+                  <h5 class="modal-title" id="exampleModalLongTitle">EDIT TRANSACTION</h5>
                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                   </button>
                 </div>
-                <form v-on:submit.prevent="updateArticle()">
+                <form v-on:submit.prevent="updateTransaction()">
                 <div class="modal-body">
                     <div class="form-group">
-                      <label for="article_heading">Article Heading</label>
+                      <label for="transaction_description">Transaction Description</label>
                       <input
                         type="text"
                         class="form-control"
-                        id="article_heading"
-                        placeholder="Enter Article Heading"
-                        v-model="currentArticle.article_heading"
+                        id="transaction_description"
+                        placeholder="Enter Transaction Description"
+                        v-model="currentTransaction.description"
                         required="required" >
                     </div>
                     <div class="form-group">
-                      <label for="article_body">Article Body</label>
+                      <label for="transaction_type">Transaction Type</label>
                       <textarea
                         class="form-control"
-                        id="article_body"
-                        placeholder="Enter Article Body"
-                        v-model="currentArticle.article_body"
+                        id="transaction_type"
+                        placeholder="Enter Transaction Type"
+                        v-model="currentTransaction.transaction_type"
                         required="required"
                         rows="3"></textarea>
                     </div>
@@ -267,26 +267,26 @@
       el: '#starting',
       delimiters: ['${','}'],
       data: {
-        articles: [],
+        transactions: [],
         loading: true,
-        currentArticle: {},
+        currentTransaction: {},
         message: null,
-        newArticle: { 'article_heading': null, 'article_body': null },
+        newTransaction: {},
         search_term: '',
       },
       mounted: function() {
-        this.getArticles();
+        this.getTransactions();
       },
       methods: {
-        getArticles: function() {
-          let api_url = '/api/article/';
+        getTransactions: function() {
+          let api_url = '/api/transaction/';
           if(this.search_term!==''||this.search_term!==null) {
-            api_url = `/api/article/?search=${this.search_term}`
+            api_url = `/api/transaction/?search=${this.search_term}`
           }
           this.loading = true;
           this.$http.get(api_url)
               .then((response) => {
-                this.articles = response.data;
+                this.transactions = response.data;
                 this.loading = false;
               })
               .catch((err) => {
@@ -294,12 +294,12 @@
                 console.log(err);
               })
         },
-        getArticle: function(id) {
+        getTransaction: function(id) {
           this.loading = true;
-          this.$http.get(`/api/article/${id}/`)
+          this.$http.get(`/api/transaction/${id}/`)
               .then((response) => {
-                this.currentArticle = response.data;
-                $("#editArticleModal").modal('show');
+                this.currentTransaction = response.data;
+                $("#editTransactionModal").modal('show');
                 this.loading = false;
               })
               .catch((err) => {
@@ -307,37 +307,37 @@
                 console.log(err);
               })
         },
-        addArticle: function() {
+        addTransaction: function() {
           this.loading = true;
-          this.$http.post('/api/article/',this.newArticle)
+          this.$http.post('/api/transaction/',this.newTransaction)
               .then((response) => {
                 this.loading = true;
-                this.getArticles();
+                this.getTransactions();
               })
               .catch((err) => {
                 this.loading = true;
                 console.log(err);
               })
         },
-        updateArticle: function() {
+        update: function() {
           this.loading = true;
-          this.$http.put(`/api/article/${this.currentArticle.article_id}/`, this.currentArticle)
+          this.$http.put(`/api/transaction/${this.currentTransaction.id}/`, this.currentTransaction)
               .then((response) => {
                 this.loading = false;
-                this.currentArticle = response.data;
-                this.getArticles();
+                this.currentTransaction = response.data;
+                this.getTransactions();
               })
               .catch((err) => {
                 this.loading = false;
                 console.log(err);
               })
         },
-        deleteArticle: function(id) {
+        deleteTransaction: function(id) {
           this.loading = true;
-          this.$http.delete(`/api/article/${id}/`)
+          this.$http.delete(`/api/transaction/${id}/`)
               .then((response) => {
                 this.loading = false;
-                this.getArticles();
+                this.getTransactions();
               })
               .catch((err) => {
                 this.loading = false;
