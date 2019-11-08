@@ -18,21 +18,11 @@ from django.urls import path, include
 from django.views.generic import base
 from django.conf import settings
 
-from django.views.generic import TemplateView
-from rest_framework import routers
-from trym.views import TransactionViewSet
-
-router = routers.DefaultRouter()
-router.register(r'transaction', TransactionViewSet)
-
 urlpatterns = [
     path('', base.TemplateView.as_view(template_name='mysite/home.html'), name='home'),
     path('admin/', admin.site.urls),
     path('users/', include('users.urls')),
     path('users/', include('django.contrib.auth.urls')),
     path('trym/', include('trym.urls')),
-
-    path('api/', include(router.urls)),
-    path('transaction', TemplateView.as_view(template_name='mysite/index_vue.html')),
 ]
 

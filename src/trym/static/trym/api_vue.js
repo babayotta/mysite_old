@@ -1,4 +1,3 @@
-Vue.http.headers.common['X-CSRFToken'] = "{{ csrf_token }}";
 new Vue({
     el: '#starting',
     delimiters: ['${','}'],
@@ -15,9 +14,9 @@ new Vue({
     },
     methods: {
         getTransactions: function() {
-            let api_url = '/api/transaction/';
+            let api_url = '/trym/api/transaction/';
             if(this.search_term!==''||this.search_term!==null) {
-                api_url = `/api/transaction/?search=${this.search_term}`
+                api_url = `/trym/api/transaction/?search=${this.search_term}`
             }
             this.loading = true;
             this.$http.get(api_url)
@@ -32,7 +31,7 @@ new Vue({
         },
         getTransaction: function(id) {
             this.loading = true;
-            this.$http.get(`/api/transaction/${id}/`)
+            this.$http.get(`/trym/api/transaction/${id}/`)
                 .then((response) => {
                     this.currentTransaction = response.data;
                     $("#editTransactionModal").modal('show');
@@ -45,7 +44,7 @@ new Vue({
         },
         addTransaction: function() {
             this.loading = true;
-            this.$http.post('/api/transaction/',this.newTransaction)
+            this.$http.post('/trym/api/transaction/',this.newTransaction)
                 .then((response) => {
                     this.loading = true;
                     this.getTransactions();
@@ -57,7 +56,7 @@ new Vue({
         },
         update: function() {
             this.loading = true;
-            this.$http.put(`/api/transaction/${this.currentTransaction.id}/`, this.currentTransaction)
+            this.$http.put(`/trym/api/transaction/${this.currentTransaction.id}/`, this.currentTransaction)
                 .then((response) => {
                     this.loading = false;
                     this.currentTransaction = response.data;
@@ -70,7 +69,7 @@ new Vue({
         },
         deleteTransaction: function(id) {
             this.loading = true;
-            this.$http.delete(`/api/transaction/${id}/`)
+            this.$http.delete(`/trym/api/transaction/${id}/`)
                 .then((response) => {
                     this.loading = false;
                     this.getTransactions();

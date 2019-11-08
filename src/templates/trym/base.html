@@ -3,27 +3,28 @@
 {% load static %}
 
 {% block mysite_base_title %}
-    TrackYourMoney
+  TrackYourMoney
 {% endblock %}
 
 {% block mysite_base_style %}
-    <link href="{% static 'trym/base.css' %}" rel="stylesheet">
+  <link href="{% static 'trym/base.css' %}" rel="stylesheet">
+
+  {% block trym_base_style %}
+  {% endblock %}
 {% endblock %}
 
 {% block mysite_base_content %}
-    <div class="container">
-        {% block trym_base_content %}
-        {% endblock %}
-    </div>
+  <div class="container">
+    {% block trym_base_content %}
+    {% endblock %}
+  </div>
 {% endblock %}
 
 {% block mysite_base_script %}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.9.0/feather.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
-    <script src="{% static 'trym/dashboard.js' %}" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.9.0/feather.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+  <script src="{% static 'trym/dashboard.js' %}" crossorigin="anonymous"></script>
 
-    <!-- vue.js files -->
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vue-resource@1.3.5"></script>
-    <script src="{% static 'trym/api_vue.js' %}" crossorigin="anonymous"></script>
+  {% block trym_base_script %}
+  {% endblock %}
 {% endblock %}

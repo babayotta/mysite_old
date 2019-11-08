@@ -1,30 +1,30 @@
 {% extends 'mysite/base.html' %}
 
 {% block mysite_base_title %}
-    Home
+  Home
 {% endblock %}
 
 {% block mysite_base_content %}
-    <!-- Main jumbotron for a primary marketing message or call to action -->
-    <div class="jumbotron">
-        <div class="container">
-            <h1 class="display-3">Итак!</h1>
-            <p>Приложенька служит для отслеживания собственных расходов.
-                Нужно только зарегестрироваться (мыло указывать не обязательно),
-                перейти на TrackYourMoney и заполнять табличку (не забудь добавить в закладки).</p>
-            {% if user.is_authenticated %}
-                <p><a class="btn btn-primary btn-lg" href="{% url 'trym:list_of_transactions' %}" role="button">TrackYourMoney &raquo;</a></p>
-            {% else %}
-                <p><a class="btn btn-primary btn-lg" href="{% url 'login' %}" role="button">Войти</a></p>
-                <p><a class="btn btn-primary btn-lg" href="{% url 'signup' %}" role="button">Зарегаться</a></p>
-            {% endif %}
-        </div>
-    </div>
+  <!-- Main jumbotron for a primary marketing message or call to action -->
+  <div class="jumbotron">
     <div class="container">
-        {% if user.is_authenticated %}
-            <p>Привет, <b>{{ user.username }}!</b></p>
-        {% else %}
-            <p>Привет, <b>незнакомец!</b></p>
-        {% endif %}
+      <h1 class="display-3">Итак!</h1>
+      <p>Приложенька служит для отслеживания собственных расходов.
+        Нужно только зарегестрироваться (мыло указывать не обязательно),
+        перейти на TrackYourMoney и заполнять табличку (не забудь добавить в закладки).</p>
+      {% if user.is_authenticated %}
+        <p><a class="btn btn-primary btn-lg" href="{% url 'trym:list_of_transactions' %}" role="button">TrackYourMoney &raquo;</a></p>
+      {% else %}
+        <p><a class="btn btn-primary btn-lg" href="{% url 'login' %}" role="button">Войти</a></p>
+        <p><a class="btn btn-primary btn-lg" href="{% url 'signup' %}" role="button">Зарегаться</a></p>
+      {% endif %}
     </div>
+  </div>
+  <div class="container">
+    {% if user.is_authenticated %}
+      <p>Привет, <b>{{ user.username }}!</b></p>
+    {% else %}
+      <p>Привет, <b>незнакомец!</b></p>
+    {% endif %}
+  </div>
 {% endblock %}
