@@ -1,6 +1,6 @@
 {% extends 'trym/base.html' %}
 
-{% block main %}
+{% block trym_base_content %}
     <form action="{{ action_url }}" method="post">
         {% csrf_token %}
         {{ form.as_p }}

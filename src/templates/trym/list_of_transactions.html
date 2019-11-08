@@ -2,9 +2,11 @@
 
 {% load static %}
 
-{% block title %}Текущий месяц{% endblock %}
+{% block mysite_base_title %}
+    Текущий месяц
+{% endblock %}
 
-{% block main %}
+{% block trym_base_content %}
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">Бюджет на текущий месяц</h1>
     </div>
@@ -140,7 +142,7 @@
     </div>
 {% endblock %}
 
-{% block custom_script %}
+{% block mysite_base_script %}
     <script>
     $(document).ready(function () {
         $('.delete_transaction').on('click', function () {

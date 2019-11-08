@@ -10,7 +10,7 @@
     <meta name="generator" content="Jekyll v3.8.5">
 
     <title>
-        {% block title %}
+        {% block mysite_base_title %}
             MySite
         {% endblock %}
     </title>
@@ -25,7 +25,7 @@
 
     <link href="{% static 'mysite/base.css' %}" rel="stylesheet">
 
-    {% block custom_style %}
+    {% block mysite_base_style %}
     {% endblock %}
 </head>
 <body>
@@ -60,7 +60,7 @@
         </ul>
     </div>
 </nav>
-{% block content %}
+{% block mysite_base_content %}
 {% endblock %}
 
 
@@ -76,11 +76,7 @@
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.9.0/feather.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
-<script src="{% static 'trym/dashboard.js' %}" crossorigin="anonymous"></script>
-
-{% block custom_script %}
+{% block mysite_base_script %}
 {% endblock %}
 
 </body>
