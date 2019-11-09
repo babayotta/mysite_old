@@ -17,22 +17,78 @@
           <button  type="button" class="btn btn-primary" data-toggle="modal" data-target="#addTransactionModal">ADD TRANSACTION</button>
           </h1>
           &emsp;
+          <!--
           <div class="form-inline my-2 my-lg-0" style="margin-left: 40%;">
             <input class="form-control mr-sm-2" type="text" placeholder="Search" v-model="search_term" aria-label="Search">
             <button class="btn btn-outline-success my-2 my-sm-0" v-on:click.prevent="getTransactions()">Search</button>
           </div>
+          -->
+          <!-- Profit Transactions -->
+          <h2>Profit Transactions</h2>
           <table class="table">
             <thead>
               <tr>
                 <th scope="col">Date</th>
+                <th scope="col">Type</th>
                 <th scope="col">Description</th>
                 <th scope="col">Value</th>
                 <th scope="col">Action</th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="transaction in transactions">
+              <tr v-for="transaction in profit_transactions">
                 <th scope="row">${transaction.date}</th>
+                <td>${transaction.transaction_type}</td>
+                <td>${transaction.description}</td>
+                <td>${transaction.value}</td>
+                <td>
+                  <button class="btn btn-info" v-on:click="getTransaction(transaction.id)">Edit</button>
+                  <button class="btn btn-danger" v-on:click="deleteTransaction(transaction.id)">Delete</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <!-- Tax Transactions -->
+          <h2>Tax Transactions</h2>
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">Date</th>
+                <th scope="col">Type</th>
+                <th scope="col">Description</th>
+                <th scope="col">Value</th>
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="transaction in tax_transactions">
+                <th scope="row">${transaction.date}</th>
+                <td>${transaction.transaction_type}</td>
+                <td>${transaction.description}</td>
+                <td>${transaction.value}</td>
+                <td>
+                  <button class="btn btn-info" v-on:click="getTransaction(transaction.id)">Edit</button>
+                  <button class="btn btn-danger" v-on:click="deleteTransaction(transaction.id)">Delete</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <!-- Buy Transactions -->
+          <h2>Buy Transactions</h2>
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">Date</th>
+                <th scope="col">Type</th>
+                <th scope="col">Description</th>
+                <th scope="col">Value</th>
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="transaction in buy_transactions">
+                <th scope="row">${transaction.date}</th>
+                <td>${transaction.transaction_type}</td>
                 <td>${transaction.description}</td>
                 <td>${transaction.value}</td>
                 <td>
