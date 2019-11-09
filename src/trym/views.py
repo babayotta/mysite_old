@@ -162,7 +162,8 @@ def delete_transaction(request, transaction_id):
 
 
 class TransactionViewSet(viewsets.ModelViewSet):
-    queryset = Transaction.objects.all()
+    today = datetime.date.today()
+    queryset = Transaction.objects.filter(date__year=today.year, date__month=today.month)
     serializer_class = TransactionSerializer
 
 #class TransactionApi(APIView):
