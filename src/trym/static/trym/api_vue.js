@@ -2,62 +2,35 @@ new Vue({
     el: '#starting',
     delimiters: ['${','}'],
     data: {
-        profit_transactions: [],
-        tax_transactions: [],
-        buy_transactions: [],
+        table: [],
         loading: true,
         currentTransaction: {},
         message: null,
         newTransaction: {},
-//        search_term: '',
     },
     mounted: function() {
-        this.getProfitTransactions();
-        this.getTaxTransactions();
-        this.getBuyTransactions();
+        this.getTable();
     },
     methods: {
-        getProfitTransactions: function() {
-            let api_url = '/trym/api/transaction/?transaction_type=P';
-//            if(this.search_term!==''||this.search_term!==null) {
-//                api_url = `/trym/api/transaction/?search=${this.search_term}`
-//            }
+        getTable: function() {
+            let api_url = '/trym/api/transaction/get_table';
+            this.loading = true;
+            this.$http.get(api_url)
+                .then((response) => {
+                    this.table = response.data;
+                    this.loading = false;
+                })
+                .catch((err) => {
+                    this.loading = false;
+                    console.log(err);
+                })
+        },
+        getTransactions: function() {
+            let api_url = '/trym/api/transaction/';
             this.loading = true;
             this.$http.get(api_url)
                 .then((response) => {
                     this.profit_transactions = response.data;
-                    this.loading = false;
-                })
-                .catch((err) => {
-                    this.loading = false;
-                    console.log(err);
-                })
-        },
-        getTaxTransactions: function() {
-            let api_url = '/trym/api/transaction/?transaction_type=T';
-//            if(this.search_term!==''||this.search_term!==null) {
-//                api_url = `/trym/api/transaction/?search=${this.search_term}`
-//            }
-            this.loading = true;
-            this.$http.get(api_url)
-                .then((response) => {
-                    this.tax_transactions = response.data;
-                    this.loading = false;
-                })
-                .catch((err) => {
-                    this.loading = false;
-                    console.log(err);
-                })
-        },
-        getBuyTransactions: function() {
-            let api_url = '/trym/api/transaction/?transaction_type=B';
- //           if(this.search_term!==''||this.search_term!==null) {
- //               api_url = `/trym/api/transaction/?search=${this.search_term}`
- //           }
-            this.loading = true;
-            this.$http.get(api_url)
-                .then((response) => {
-                    this.buy_transactions = response.data;
                     this.loading = false;
                 })
                 .catch((err) => {

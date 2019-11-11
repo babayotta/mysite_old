@@ -4,3 +4,4 @@ ipython
 psycopg2-binary
 factory_boy
 djangorestframework
+django-filter
