@@ -63,7 +63,7 @@ new Vue({
                     console.log(err);
                 })
         },
-        update: function() {
+        updateTransaction: function() {
             this.loading = true;
             this.$http.put(`/trym/api/transaction/${this.currentTransaction.id}/`, this.currentTransaction)
                 .then((response) => {
