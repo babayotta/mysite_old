@@ -3,143 +3,139 @@
 {% load static %}
 
 {% block mysite_base_title %}
-    Текущий месяц
+  Текущий месяц
 {% endblock %}
 
 {% block trym_base_content %}
-    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">Бюджет на текущий месяц</h1>
-    </div>
-
-    <h2>
-        <a class="btn btn-primary btn-lg" href="{% url 'trym:new_transaction' %}" role="button">+</a>
-        Доходы: {{ profits_total }}
-    </h2>
-
-    <div class="table-responsive">
-        <table class="table table-striped table-sm">
-            <thead>
-            <tr>
-                <th>Дата</th>
-                <th>Описание</th>
-                <th>Значение</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td></td>
-                <td>Доход с предыдущего месяца</td>
-                <td>{{ previous_total_sum }}</td>
-            </tr>
-            {% for profit in profits %}
-                <tr>
-                    <td>{{ profit.date|date:"M/d" }}</td>
-                    <td>
-                        {% for transaction in profit.transactions %}
-                            <a href="{% url 'trym:change_transaction' transaction.id %}">
-                                {{ transaction.description }}
-                            </a>
-                            <a class="delete_transaction" href="{% url 'trym:delete_transaction' transaction.id %}">
-                                <span data-feather="trash"></span>
-                            </a>
-                            <br>
-                        {% endfor %}
-                    </td>
-                    <td>
-                        {% for transaction in profit.transactions %}
-                            {{ transaction.value }}
-                            <br>
-                        {% endfor %}
-                    </td>
-                </tr>
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Бюджет на текущий месяц</h1>
+  </div>
+  <h2>
+    <a class="btn btn-primary btn-lg" href="{% url 'trym:new_transaction' %}" role="button">+</a>
+    Доходы: {{ profits_total }}
+  </h2>
+  <div class="table-responsive">
+    <table class="table table-striped table-sm">
+      <thead>
+      <tr>
+        <th>Дата</th>
+        <th>Описание</th>
+        <th>Значение</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td></td>
+        <td>Доход с предыдущего месяца</td>
+        <td>{{ previous_total_sum }}</td>
+      </tr>
+      {% for profit in profits %}
+        <tr>
+          <td>{{ profit.date|date:"M/d" }}</td>
+          <td>
+            {% for transaction in profit.transactions %}
+              <a href="{% url 'trym:change_transaction' transaction.id %}">
+                {{ transaction.description }}
+              </a>
+              <a class="delete_transaction" href="{% url 'trym:delete_transaction' transaction.id %}">
+                <span data-feather="trash"></span>
+              </a>
+              <br>
             {% endfor %}
-            </tbody>
-        </table>
-    </div>
-
-    <h2>
-        <a class="btn btn-primary btn-lg" href="{% url 'trym:new_transaction' %}" role="button">+</a>
-        Расходы: {{ taxes_total }}
-    </h2>
-    <div class="table-responsive">
-        <table class="table table-striped table-sm">
-            <thead>
-            <tr>
-                <th>Дата</th>
-                <th>Описание</th>
-                <th>Значение</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for tax in taxes %}
-                <tr>
-                    <td>{{ tax.date|date:"M/d" }}</td>
-                    <td>
-                        {% for transaction in tax.transactions %}
-                            <a href="{% url 'trym:change_transaction' transaction.id %}">
-                                {{ transaction.description }}
-                            </a>
-                            <a class="delete_transaction" href="{% url 'trym:delete_transaction' transaction.id %}">
-                                <span data-feather="trash"></span>
-                            </a>
-                            <br>
-                        {% endfor %}
-                    </td>
-                    <td>
-                        {% for transaction in tax.transactions %}
-                            {{ transaction.value }}
-                            <br>
-                        {% endfor %}
-                    </td>
-                </tr>
+          </td>
+          <td>
+            {% for transaction in profit.transactions %}
+              {{ transaction.value }}
+              <br>
             {% endfor %}
-            </tbody>
-        </table>
-    </div>
-
-    <h2>
-        <a class="btn btn-primary btn-lg" href="{% url 'trym:new_transaction' %}" role="button">+</a>
-        Траты: {{ buys_total }}
-    </h2>
-    <div class="table-responsive">
-        <table class="table table-striped table-sm">
-            <thead>
-            <tr>
-                <th>Дата</th>
-                <th>Описание</th>
-                <th>Значение</th>
-                <th>Бюджет на день</th>
-                <th>Остаток</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for buy in buys %}
-                <tr>
-                    <td>{{ buy.date|date:"M/d" }}</td>
-                    <td>
-                        {% for transaction in buy.transactions %}
-                            <a href="{% url 'trym:change_transaction' transaction.id %}">
-                                {{ transaction.description }}
-                            </a>
-                            <a class="delete_transaction" href="{% url 'trym:delete_transaction' transaction.id %}">
-                                <span data-feather="trash"></span>
-                            </a>
-                            <br>
-                        {% endfor %}
-                    </td>
-                    <td>
-                        {% for transaction in buy.transactions %}
-                            {{ transaction.value }}
-                            <br>
-                        {% endfor %}
-                    </td>
-                    <td>{{ buy.budget_for_day }}</td>
-                    <td>{{ buy.balance_for_day }}</td>
-                </tr>
+          </td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <h2>
+    <a class="btn btn-primary btn-lg" href="{% url 'trym:new_transaction' %}" role="button">+</a>
+    Расходы: {{ taxes_total }}
+  </h2>
+  <div class="table-responsive">
+    <table class="table table-striped table-sm">
+      <thead>
+      <tr>
+        <th>Дата</th>
+        <th>Описание</th>
+        <th>Значение</th>
+      </tr>
+      </thead>
+      <tbody>
+      {% for tax in taxes %}
+        <tr>
+          <td>{{ tax.date|date:"M/d" }}</td>
+          <td>
+            {% for transaction in tax.transactions %}
+              <a href="{% url 'trym:change_transaction' transaction.id %}">
+                {{ transaction.description }}
+              </a>
+              <a class="delete_transaction" href="{% url 'trym:delete_transaction' transaction.id %}">
+                <span data-feather="trash"></span>
+              </a>
+              <br>
             {% endfor %}
-            </tbody>
-        </table>
-    </div>
+          </td>
+          <td>
+            {% for transaction in tax.transactions %}
+              {{ transaction.value }}
+              <br>
+            {% endfor %}
+          </td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <h2>
+    <a class="btn btn-primary btn-lg" href="{% url 'trym:new_transaction' %}" role="button">+</a>
+    Траты: {{ buys_total }}
+  </h2>
+  <div class="table-responsive">
+    <table class="table table-striped table-sm">
+      <thead>
+      <tr>
+        <th>Дата</th>
+        <th>Описание</th>
+        <th>Значение</th>
+        <th>Бюджет на день</th>
+        <th>Остаток</th>
+      </tr>
+      </thead>
+      <tbody>
+      {% for buy in buys %}
+        <tr>
+          <td>{{ buy.date|date:"M/d" }}</td>
+          <td>
+            {% for transaction in buy.transactions %}
+              <a href="{% url 'trym:change_transaction' transaction.id %}">
+                {{ transaction.description }}
+              </a>
+              <a class="delete_transaction" href="{% url 'trym:delete_transaction' transaction.id %}">
+                <span data-feather="trash"></span>
+              </a>
+              <br>
+            {% endfor %}
+          </td>
+          <td>
+            {% for transaction in buy.transactions %}
+              {{ transaction.value }}
+              <br>
+            {% endfor %}
+          </td>
+          <td>{{ buy.budget_for_day }}</td>
+          <td>{{ buy.balance_for_day }}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
 {% endblock %}
 
 {% block mysite_base_script %}
