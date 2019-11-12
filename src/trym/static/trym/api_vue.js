@@ -56,7 +56,7 @@ new Vue({
             this.$http.post('/trym/api/transaction/',this.newTransaction)
                 .then((response) => {
                     this.loading = true;
-                    this.getTransactions();
+                    this.getTable();
                 })
                 .catch((err) => {
                     this.loading = true;
@@ -69,7 +69,7 @@ new Vue({
                 .then((response) => {
                     this.loading = false;
                     this.currentTransaction = response.data;
-                    this.getTransactions();
+                    this.getTable();
                 })
                 .catch((err) => {
                     this.loading = false;
@@ -81,7 +81,7 @@ new Vue({
             this.$http.delete(`/trym/api/transaction/${id}/`)
                 .then((response) => {
                     this.loading = false;
-                    this.getTransactions();
+                    this.getTable();
                 })
                 .catch((err) => {
                     this.loading = false;

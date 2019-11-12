@@ -6,8 +6,8 @@ from django.db.models.functions import Coalesce
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.decorators import action
-from rest_framework import viewsets
-from trym.serializers import TransactionSerializer
+from rest_framework import viewsets, permissions
+from rest_framework import serializers
 from trym.models import Transaction
 from trym.forms import TransactionForm
 
@@ -162,9 +162,29 @@ def delete_transaction(request, transaction_id):
     return list_of_transactions(request)
 
 
+class TransactionSerializer(serializers.ModelSerializer):
+    user = serializers.HiddenField(
+        default=serializers.CurrentUserDefault()
+    )
+
+    class Meta:
+        model = Transaction
+        fields = (
+            'id', 'date', 'description', 'value', 'transaction_type', 'user',
+        )
+
+
+class IsOwner(permissions.BasePermission):
+    message = "Note an owner."
+
+    def has_object_permission(self, request, view, obj):
+        return request.user == obj.user
+
+
 class TransactionViewSet(viewsets.ModelViewSet):
     queryset = Transaction.objects.all()
     serializer_class = TransactionSerializer
+    permission_classes = [IsOwner]
     filterset_fields = {
         'id': ['exact', 'lte', 'gte', ],
         'date': ['exact', 'lte', 'gte', ],

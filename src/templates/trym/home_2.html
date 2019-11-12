@@ -109,29 +109,49 @@
           <form v-on:submit.prevent="addTransaction()">
             <div class="modal-body">
               <div class="form-group">
-                <label for="transaction_description">Transaction Description</label>
+                <label for="transaction_date">Дата</label>
                 <input
                   type="text"
                   class="form-control"
-                  id="transaction_description"
-                  placeholder="Enter Transaction Description"
-                  v-model="newTransaction.description"
-                  required="required" >
+                  id="transaction_date"
+                  placeholder="Введите дату"
+                  v-model="newTransaction.date"
+                  required="required">
               </div>
               <div class="form-group">
-                <label for="transaction_type">Transaction Type</label>
+                <label for="transaction_description">Описание</label>
                 <textarea
                   class="form-control"
-                  id="transaction_type"
-                  placeholder="Enter Transaction Type"
-                  v-model="newTransaction.transaction_type"
+                  id="transaction_description"
+                  placeholder="Введите описание"
+                  v-model="newTransaction.description"
                   required="required"
                   rows="3"></textarea>
               </div>
+              <div class="form-group">
+                <label for="transaction_value">Значение</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="transaction_value"
+                  placeholder="Введите значение"
+                  v-model.number="newTransaction.value"
+                  required="required">
+              </div>
+              <div class="form-group">
+                <label for="transaction_type">Тип записи</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="transaction_type"
+                  placeholder="Введите тип"
+                  v-model="newTransaction.transaction_type"
+                  required="required">
+              </div>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary m-progress" data-dismiss="modal">Close</button>
-              <button type="submit" class="btn btn-primary">Save changes</button>
+              <button type="button" class="btn btn-secondary m-progress" data-dismiss="modal">Закрыть</button>
+              <button type="submit" class="btn btn-primary">Сохранить</button>
             </div>
           </form>
         </div>
@@ -153,24 +173,44 @@
           <form v-on:submit.prevent="updateTransaction()">
             <div class="modal-body">
               <div class="form-group">
-                <label for="transaction_description">Transaction Description</label>
+                <label for="transaction_date">Дата</label>
                 <input
                   type="text"
                   class="form-control"
-                  id="transaction_description"
-                  placeholder="Enter Transaction Description"
-                  v-model="currentTransaction.description"
-                  required="required" >
+                  id="transaction_date"
+                  placeholder="Введите дату"
+                  v-model="currentTransaction.date"
+                  required="required">
               </div>
               <div class="form-group">
-                <label for="transaction_type">Transaction Type</label>
+                <label for="transaction_description">Описание</label>
                 <textarea
                   class="form-control"
-                  id="transaction_type"
-                  placeholder="Enter Transaction Type"
-                  v-model="currentTransaction.transaction_type"
+                  id="transaction_description"
+                  placeholder="Введите описание"
+                  v-model="currentTransaction.description"
                   required="required"
                   rows="3"></textarea>
+              </div>
+              <div class="form-group">
+                <label for="transaction_value">Значение</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="transaction_value"
+                  placeholder="Введите значение"
+                  v-model.number="currentTransaction.value"
+                  required="required">
+              </div>
+              <div class="form-group">
+                <label for="transaction_type">Тип записи</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="transaction_type"
+                  placeholder="Введите тип"
+                  v-model="currentTransaction.transaction_type"
+                  required="required">
               </div>
             </div>
             <div class="modal-footer">
@@ -194,4 +234,5 @@
   <script src="https://cdn.jsdelivr.net/npm/vue-resource@1.3.5"></script>
   <script>Vue.http.headers.common['X-CSRFToken'] = "{{ csrf_token }}";</script>
   <script src="{% static 'trym/api_vue.js' %}" crossorigin="anonymous"></script
+  <script src="https://unpkg.com/browse/@livelybone/vue-datepicker@3.1.0/lib/umd/Datepicker.js"></script>
 {% endblock %}

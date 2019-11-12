@@ -3,7 +3,6 @@ from django.views.generic import TemplateView
 from rest_framework import routers
 from trym import views
 from trym.views import TransactionViewSet
-#from trym.views import TransactionApi
 
 router = routers.DefaultRouter()
 router.register(r'transaction', TransactionViewSet)
