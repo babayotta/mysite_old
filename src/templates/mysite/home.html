@@ -13,7 +13,7 @@
         Нужно только зарегестрироваться (мыло указывать не обязательно),
         перейти на TrackYourMoney и заполнять табличку (не забудь добавить в закладки).</p>
       {% if user.is_authenticated %}
-        <p><a class="btn btn-primary btn-lg" href="{% url 'trym:list_of_transactions' %}" role="button">TrackYourMoney &raquo;</a></p>
+        <p><a class="btn btn-primary btn-lg" href="{% url 'trym:home' %}" role="button">TrackYourMoney &raquo;</a></p>
       {% else %}
         <p><a class="btn btn-primary btn-lg" href="{% url 'login' %}" role="button">Войти</a></p>
         <p><a class="btn btn-primary btn-lg" href="{% url 'signup' %}" role="button">Зарегаться</a></p>

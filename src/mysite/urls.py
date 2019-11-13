@@ -16,7 +16,6 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import base
-from django.conf import settings
 
 urlpatterns = [
     path('', base.TemplateView.as_view(template_name='mysite/home.html'), name='home'),
