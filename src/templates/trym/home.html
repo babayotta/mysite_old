@@ -111,7 +111,7 @@
               <div class="form-group">
                 <label for="transaction_date">Дата</label>
                 <input
-                  type="text"
+                  type="date"
                   class="form-control"
                   id="transaction_date"
                   placeholder="Введите дату"
@@ -132,21 +132,25 @@
                 <label for="transaction_value">Значение</label>
                 <input
                   type="number"
+                  step="0.01"
                   class="form-control"
                   id="transaction_value"
                   placeholder="Введите значение"
-                  v-model.number="newTransaction.value"
+                  v-model="newTransaction.value"
                   required="required">
               </div>
               <div class="form-group">
                 <label for="transaction_type">Тип записи</label>
-                <input
-                  type="text"
+                <select
                   class="form-control"
                   id="transaction_type"
                   placeholder="Введите тип"
                   v-model="newTransaction.transaction_type"
                   required="required">
+                    <option value="P">Доход</option>
+                    <option value="T">Расход</option>
+                    <option value="B">Трата</option>
+                </select>
               </div>
             </div>
             <div class="modal-footer">
@@ -175,7 +179,7 @@
               <div class="form-group">
                 <label for="transaction_date">Дата</label>
                 <input
-                  type="text"
+                  type="date"
                   class="form-control"
                   id="transaction_date"
                   placeholder="Введите дату"
@@ -196,22 +200,26 @@
                 <label for="transaction_value">Значение</label>
                 <input
                   type="number"
+                  step="0.01"
                   class="form-control"
                   id="transaction_value"
                   placeholder="Введите значение"
-                  v-model.number="currentTransaction.value"
+                  v-model="currentTransaction.value"
                   required="required">
               </div>
               <div class="form-group">
                 <label for="transaction_type">Тип записи</label>
-                <input
-                  type="text"
+                <select
                   class="form-control"
                   id="transaction_type"
                   placeholder="Введите тип"
                   v-model="currentTransaction.transaction_type"
                   required="required">
-              </div>
+                    <option value="P">Доход</option>
+                    <option value="T">Расход</option>
+                    <option value="B">Трата</option>
+                </select>
+               </div>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary m-progress" data-dismiss="modal">Закрыть</button>
