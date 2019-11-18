@@ -38,14 +38,22 @@ class TransactionViewSet(viewsets.ModelViewSet):
     }
 
     @action(detail=False)
-    def get_table(self, request, dates=None):
-        print(f'----- test: {dates} -----')
-        today = datetime.date.today()
-        user = request.user
-        _, number_of_days = monthrange(today.year, today.month)
+    def get_table(self, request, dates=''):
+        if dates and dates.split('+')[0] and dates.split('+')[1]:
+            dates = dates.split('+')
+            from_date = datetime.date.fromisoformat(dates[0])
+            to_date = datetime.date.fromisoformat(dates[1])
+            delta = to_date - from_date
+            number_of_days = delta.days + 1
+        else:
+            today = datetime.date.today()
+            _, number_of_days = monthrange(today.year, today.month)
+            from_date = today.replace(day=1)
+            to_date = today.replace(day=number_of_days)
 
+        user = request.user
         transactions = Transaction.objects.filter(
-            user=user, date__year=today.year, date__month=today.month)
+            user=user, date__gte=from_date, date__lte=to_date)
 
         buy_transactions = list(
             transactions.filter(transaction_type=Transaction.BUY).order_by('date'))
@@ -61,7 +69,7 @@ class TransactionViewSet(viewsets.ModelViewSet):
         )
 
         previous_total_sum = Transaction.objects.filter(
-            user=user, date__lt=today.replace(day=1)).aggregate(
+            user=user, date__lt=from_date).aggregate(
                 value=
                 Coalesce(Sum('value', filter=Q(transaction_type=Transaction.PROFIT)), V(0)) -
                 Coalesce(Sum('value', filter=Q(transaction_type=Transaction.TAX)), V(0)) -
@@ -76,8 +84,8 @@ class TransactionViewSet(viewsets.ModelViewSet):
         buys = []
         taxes = []
         profits = []
+        date = from_date
         for day in range(number_of_days):
-            date = today.replace(day=day + 1)
             sum_buy_for_day = 0
             sum_tax_for_day = 0
             sum_profit_for_day = 0
@@ -98,7 +106,8 @@ class TransactionViewSet(viewsets.ModelViewSet):
                     sum_profit_for_day += transaction.value
                     profit_transactions_for_day.append(transaction)
 
-            budget_for_day = (sum_profit_for_day - sum_tax_for_day + balance_for_previous_day) / remaining_days
+            budget_for_day = (
+                sum_profit_for_day - sum_tax_for_day + balance_for_previous_day) / remaining_days
             for i in range(day, number_of_days):
                 budget_for_days[i] += budget_for_day
             balance_for_previous_day = budget_for_days[day] - sum_buy_for_day
@@ -132,6 +141,7 @@ class TransactionViewSet(viewsets.ModelViewSet):
                         'value': transaction.value,
                     } for transaction in profit_transactions_for_day],
                 })
+            date = date + datetime.timedelta(days=1)
 
         table = {
             'buys': buys,

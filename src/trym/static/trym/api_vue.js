@@ -7,13 +7,38 @@ new Vue({
         currentTransaction: {},
         message: null,
         newTransaction: {},
+        from_date: '',
+        to_date: '',
     },
     mounted: function() {
+        if (localStorage.from_date && localStorage.to_date) {
+            this.from_date = localStorage.from_date;
+            this.to_date = localStorage.to_date;
+        };
         this.getTable();
     },
     methods: {
-        getTable: function() {
+        getResetedTable: function() {
+            this.from_date = '';
+            this.to_date = '';
+            localStorage.removeItem('from_date');
+            localStorage.removeItem('to_date');
             let api_url = '/trym/api/transaction/get_table/';
+            this.loading = true;
+            this.$http.get(api_url)
+                .then((response) => {
+                    this.table = response.data;
+                    this.loading = false;
+                })
+                .catch((err) => {
+                    this.loading = false;
+                    console.log(err);
+                })
+        },
+        getTable: function() {
+            localStorage.from_date = this.from_date;
+            localStorage.to_date = this.to_date;
+            let api_url = `/trym/api/transaction/get_table/${this.from_date}+${this.to_date}`;
             this.loading = true;
             this.$http.get(api_url)
                 .then((response) => {

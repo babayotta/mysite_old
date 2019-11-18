@@ -21,6 +21,30 @@
                  data-target="#addTransactionModal">Добавить запись</button>
       </h1>
     </div>
+    <form v-on:submit.prevent="getTable()">
+      <div class="form-group row">
+        <label class="col-sm-1 col-form-label" for="from_date">С</label>
+        <div class="col-sm-3 mb-3">
+          <input
+            type="date"
+            class="form-control"
+            id="from_date"
+            v-model="from_date">
+        </div>
+        <label class="col-sm-1 col-form-label" for="to_date">По</label>
+        <div class="col-sm-3 mb-3">
+          <input
+            type="date"
+            class="form-control"
+            id="to_date"
+            v-model="to_date">
+        </div>
+        <div class="col-sm-4">
+          <button type="submit" class="btn btn-primary">Получить</button>
+          <button type="button" class="btn btn-secondary m-progress" v-on:click="getResetedTable()">Сбросить</button>
+        </div>
+      </div>
+    </form>
     &emsp;
     <h2>Доходы: ${ table.profits_total }</h2>
     <div class="table-responsive">
