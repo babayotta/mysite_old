@@ -38,7 +38,8 @@ class TransactionViewSet(viewsets.ModelViewSet):
     }
 
     @action(detail=False)
-    def get_table(self, request):
+    def get_table(self, request, dates=None):
+        print(f'----- test: {dates} -----')
         today = datetime.date.today()
         user = request.user
         _, number_of_days = monthrange(today.year, today.month)

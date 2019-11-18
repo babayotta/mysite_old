@@ -13,7 +13,7 @@ new Vue({
     },
     methods: {
         getTable: function() {
-            let api_url = '/trym/api/transaction/get_table';
+            let api_url = '/trym/api/transaction/get_table/';
             this.loading = true;
             this.$http.get(api_url)
                 .then((response) => {

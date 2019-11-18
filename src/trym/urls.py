@@ -8,6 +8,8 @@ router.register(r'transaction', TransactionViewSet)
 
 app_name = 'trym'
 urlpatterns = [
+    path('api/transaction/get_table/<dates>/', 
+         TransactionViewSet.as_view({'get': 'get_table'})),
     path('api/', include(router.urls)),
     path('', TemplateView.as_view(template_name='trym/home.html'), name="home"),
 ]
