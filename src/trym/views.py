@@ -37,7 +37,7 @@ class TransactionViewSet(viewsets.ModelViewSet):
         'transaction_type': ['exact', ],
     }
 
-    @action(detail=False)
+    @action(detail=False, permission_classes=[IsOwner])
     def get_table(self, request, dates=''):
         if dates and dates.split('+')[0] and dates.split('+')[1]:
             dates = dates.split('+')

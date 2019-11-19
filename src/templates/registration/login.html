@@ -1,16 +1,16 @@
 {% extends 'mysite/base.html' %}
 
 {% block mysite_base_title %}
-    Вход
+  Вход
 {% endblock %}
 
 {% block mysite_base_content %}
-    <div class="container">
-        <h1>Вход</h1>
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">Войти</button>
-        </form>
-    </div> <!-- /container -->
+  <div class="container">
+    <h1>Вход</h1>
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit" class="btn btn-primary">Войти</button>
+    </form>
+  </div> <!-- /container -->
 {% endblock %}
