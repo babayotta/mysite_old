@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'trym.apps.TrymConfig',
     'rest_framework',
     'django_filters',
+    'bootstrap4',
 ]
 
 MIDDLEWARE = [
