@@ -5,4 +5,5 @@ FROM nginx
  
 ADD uwsgi_params /etc/nginx/
 ADD django.conf /etc/nginx/conf.d/default.conf
-
+ADD babayotta.su-EncryptionEverywhere-DigiCertGlobalRoot.crt /etc/ssl/
+ADD babayotta.su.key /etc/ssl/
