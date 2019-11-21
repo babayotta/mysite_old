@@ -110,3 +110,7 @@ venv.bak/
 # VisualStudio Code
 src/.vscode/
 src/mysite.code-workspace
+
+# SSL certificates and keys
+babayotta.su-EncryptionEverywhere-DigiCertGlobalRoot.crt
+babayotta.su.key
